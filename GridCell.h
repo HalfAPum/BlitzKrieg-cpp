@@ -1,0 +1,38 @@
+//
+// Created by o.narvatov on 8/7/2024.
+//
+
+#ifndef GRIDCELL_H
+#define GRIDCELL_H
+#include "EnemyGrid.h"
+#include "EnemyGridXXS.h"
+
+class EnemyGrid;
+
+using namespace std;
+
+class GridCell {
+public:
+    int x = 0;
+    int z = 0;
+    EnemyGrid* enemy_grid = nullptr;
+
+    GridCell() = default;
+    GridCell(const int _x, const int _z, EnemyGrid* e_grid) : x(_x), z(_z), enemy_grid(e_grid) {}
+
+    int get_enemy_count() const;
+
+    BlitzUnit* find_if(const BlitzUnit* unit, bool (*predicate)(const BlitzUnit*, const BlitzUnit*)) const;
+
+    //Test
+    void as_text() {
+        string temp = "Grid x: " + to_string(x) + " z: " + to_string(z) + " scale: " + to_string(enemy_grid->grid_size);
+        char tab2[1024];
+        strcpy(tab2, temp.c_str());
+        UtilityFunctions::print(tab2);
+    }
+};
+
+
+
+#endif //GRIDCELL_H
