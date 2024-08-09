@@ -5,10 +5,11 @@
 #ifndef SPLIT_GRID_CELL_H
 #define SPLIT_GRID_CELL_H
 #include "GridCell.h"
+#include "UnitGirdFactory.h"
 
 //Stable. Was tested.
 inline array<GridCell, 4> split_grid_cell(const GridCell &cell, const BlitzUnit* unit) {
-    EnemyGrid* next_precision_enemy_grid = cell.enemy_grid->next_precision_grid();
+    UnitGrid* next_precision_enemy_grid = get_unit_grid_factory_enum(cell.unit_grid)->next_precision_grid(cell.unit_grid->grid_size);
 
     //Assme precision level goes up by two
     const int sx = cell.x * 2;
@@ -18,10 +19,10 @@ inline array<GridCell, 4> split_grid_cell(const GridCell &cell, const BlitzUnit*
     const int unit_x = position.x;
     const int unit_z = position.z;
 
-    const int half_grid = cell.enemy_grid->grid_size / 2;
+    const int half_grid = cell.unit_grid->grid_size / 2;
 
-    const int xmod = unit_x % cell.enemy_grid->grid_size;
-    const int zmod = unit_z % cell.enemy_grid->grid_size;
+    const int xmod = unit_x % cell.unit_grid->grid_size;
+    const int zmod = unit_z % cell.unit_grid->grid_size;
 
     const auto top_left_cell = GridCell(sx, sz, next_precision_enemy_grid);
     const auto top_right_cell = GridCell(sx + 1, sz, next_precision_enemy_grid);

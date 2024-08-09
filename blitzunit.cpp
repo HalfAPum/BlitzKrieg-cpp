@@ -12,14 +12,13 @@
 
 #include "can_attack_enemy_algorithm.h"
 #include "Constants.h"
-#include "EnemyGrid.h"
-#include "EnemyGridS.h"
-#include "EnemyGridXS.h"
-#include "EnemyGridXXS.h"
+#include "UnitGrid.h"
+#include "UnitGridXXS.h"
 #include "fill_initial_adjacent_cells_algorithm.h"
 #include "GridCell.h"
 #include "SelectionManager.h"
 #include "split_grid_cell.h"
+#include "UnitGirdFactory.h"
 
 void BlitzUnit::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_search_enemy"), &BlitzUnit::_search_enemy);
@@ -49,8 +48,8 @@ void BlitzUnit::_ready() {
 void BlitzUnit::on_grid_position_changed() {
     if (!isEnemy) return;
 
-    EnemyGridXXS::instance()->remove_enemy(this);
-    EnemyGridXXS::instance()->add_enemy(this);
+    enemy_unit_grid_abstract_factory->grid_xxs->remove_enemy(this);
+    enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
 }
 
 constexpr int MOVE_SPEED = 4;
@@ -176,16 +175,16 @@ BlitzUnit::~BlitzUnit() {
     delete search_enemy_timer;
 }
 
-EnemyGrid* get_enemy_grid(const real_t radius) {
+UnitGrid* get_enemy_grid(const real_t radius) {
     const real_t minumum_grid_size = radius;
 
     if (minumum_grid_size <= 4) {
-        return EnemyGridXXS::instance();
+        return enemy_unit_grid_abstract_factory->grid_xxs_cast;
     }
     if (minumum_grid_size <= 8) {
-        return EnemyGridXS::instance();
+        return enemy_unit_grid_abstract_factory->grid_xs;
     }
-    return EnemyGridS::instance();
+    return enemy_unit_grid_abstract_factory->grid_s;
 }
 
 constexpr unsigned MAP_SIZE = 32;
@@ -202,8 +201,8 @@ BlitzUnit* findEnemy(const BlitzUnit *unit) {
 
         stack.pop();
 
-        if (grid_cell.x < 0 || grid_cell.x >= MAP_SIZE / grid_cell.enemy_grid->grid_size) continue;
-        if (grid_cell.z < 0 || grid_cell.z >= MAP_SIZE / grid_cell.enemy_grid->grid_size) continue;
+        if (grid_cell.x < 0 || grid_cell.x >= MAP_SIZE / grid_cell.unit_grid->grid_size) continue;
+        if (grid_cell.z < 0 || grid_cell.z >= MAP_SIZE / grid_cell.unit_grid->grid_size) continue;
 
         const int enemy_count = grid_cell.get_enemy_count();
 
@@ -211,7 +210,7 @@ BlitzUnit* findEnemy(const BlitzUnit *unit) {
             continue;
         }
 
-        if (enemy_count <= 4 || grid_cell.enemy_grid->is_last_level_of_precision()) {
+        if (enemy_count <= 4 || grid_cell.unit_grid->is_last_level_of_precision()) {
             const auto found_unit = grid_cell.find_if(unit, can_attack_enemy);
 
             if (found_unit != nullptr) return found_unit;

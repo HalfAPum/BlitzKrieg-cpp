@@ -11,10 +11,10 @@
 #include <godot_cpp/classes/timer.hpp>
 
 class SelectionManager;
-class EnemyGrid;
-class EnemyGridS;
-class EnemyGridXS;
-class EnemyGridXXS;
+class UnitGrid;
+class UnitGridS;
+class UnitGridXS;
+class UnitGridXXS;
 
 using namespace godot;
 
@@ -37,6 +37,7 @@ public:
     void move_command(const Vector3 &vector3);
 
     bool isEnemy = false;
+    bool isAlly = false;
 
     //attack
     const int attack_radius = 9;

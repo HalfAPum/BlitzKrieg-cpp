@@ -4,27 +4,29 @@
 
 #ifndef ENEMYGRIDCOMPACT_H
 #define ENEMYGRIDCOMPACT_H
-#include "EnemyGrid.h"
-#include "GridArray.h"
+#include "UnitGrid.h"
+#include "grid/array/GridArray.h"
 
 class BlitzUnit;
 
 using namespace std;
 
-class EnemyGridCompact : public EnemyGrid {
+class UnitGridCompact : public UnitGrid {
 protected:
     GridArray *grid_array;
 
-    explicit EnemyGridCompact(GridArray *g_array, const int grid_level) : EnemyGrid(g_array->grid_size, grid_level), grid_array(g_array) {}
+    explicit UnitGridCompact(
+        const UnitGridType unit_grid_type,
+        GridArray *g_array,
+        const int grid_level
+    ) : UnitGrid(unit_grid_type, g_array->grid_size, grid_level), grid_array(g_array) {}
 public:
     void add_enemy(BlitzUnit *unit) override;
     void remove_enemy(BlitzUnit *unit) override;
 
     int get_enemy_count(int x, int z) const override;
 
-    bool is_last_level_of_precision() const override { return false; }
-
-    ~EnemyGridCompact() override {
+    ~UnitGridCompact() override {
         delete grid_array;
     }
 

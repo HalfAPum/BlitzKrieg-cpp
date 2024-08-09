@@ -34,6 +34,6 @@ cd ..
 #Run scons
 scons platform=windows
 
-timeout=60
+timeout=6000
 echo "Process finished. Terminal will close in $timeout seconds."
 sleep $timeout

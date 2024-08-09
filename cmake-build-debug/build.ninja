@@ -56,41 +56,6 @@ build CMakeFiles/src.dir/Constants.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$
   OBJECT_DIR = CMakeFiles\src.dir
   OBJECT_FILE_DIR = CMakeFiles\src.dir
 
-build CMakeFiles/src.dir/EnemyGridCompact.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/EnemyGridCompact.cpp || cmake_object_order_depends_target_src
-  DEP_FILE = CMakeFiles\src.dir\EnemyGridCompact.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
-  OBJECT_DIR = CMakeFiles\src.dir
-  OBJECT_FILE_DIR = CMakeFiles\src.dir
-
-build CMakeFiles/src.dir/EnemyGridS.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/EnemyGridS.cpp || cmake_object_order_depends_target_src
-  DEP_FILE = CMakeFiles\src.dir\EnemyGridS.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
-  OBJECT_DIR = CMakeFiles\src.dir
-  OBJECT_FILE_DIR = CMakeFiles\src.dir
-
-build CMakeFiles/src.dir/EnemyGridXS.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/EnemyGridXS.cpp || cmake_object_order_depends_target_src
-  DEP_FILE = CMakeFiles\src.dir\EnemyGridXS.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
-  OBJECT_DIR = CMakeFiles\src.dir
-  OBJECT_FILE_DIR = CMakeFiles\src.dir
-
-build CMakeFiles/src.dir/EnemyGridXXS.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/EnemyGridXXS.cpp || cmake_object_order_depends_target_src
-  DEP_FILE = CMakeFiles\src.dir\EnemyGridXXS.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
-  OBJECT_DIR = CMakeFiles\src.dir
-  OBJECT_FILE_DIR = CMakeFiles\src.dir
-
-build CMakeFiles/src.dir/GridArray.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/GridArray.cpp || cmake_object_order_depends_target_src
-  DEP_FILE = CMakeFiles\src.dir\GridArray.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
-  OBJECT_DIR = CMakeFiles\src.dir
-  OBJECT_FILE_DIR = CMakeFiles\src.dir
-
 build CMakeFiles/src.dir/GridCell.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/GridCell.cpp || cmake_object_order_depends_target_src
   DEP_FILE = CMakeFiles\src.dir\GridCell.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
@@ -100,6 +65,41 @@ build CMakeFiles/src.dir/GridCell.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:
 
 build CMakeFiles/src.dir/SelectionManager.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/SelectionManager.cpp || cmake_object_order_depends_target_src
   DEP_FILE = CMakeFiles\src.dir\SelectionManager.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir
+
+build CMakeFiles/src.dir/UnitGridAbstractFactory.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/UnitGridAbstractFactory.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\UnitGridAbstractFactory.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir
+
+build CMakeFiles/src.dir/UnitGridCompact.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/UnitGridCompact.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\UnitGridCompact.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir
+
+build CMakeFiles/src.dir/UnitGridS.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/UnitGridS.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\UnitGridS.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir
+
+build CMakeFiles/src.dir/UnitGridXS.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/UnitGridXS.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\UnitGridXS.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir
+
+build CMakeFiles/src.dir/UnitGridXXS.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/UnitGridXXS.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\UnitGridXXS.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
   OBJECT_DIR = CMakeFiles\src.dir
@@ -133,6 +133,13 @@ build CMakeFiles/src.dir/terrain3D.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$
   OBJECT_DIR = CMakeFiles\src.dir
   OBJECT_FILE_DIR = CMakeFiles\src.dir
 
+build CMakeFiles/src.dir/grid/array/GridArray.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/grid/array/GridArray.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\grid\array\GridArray.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir\grid\array
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target src
@@ -141,7 +148,7 @@ build CMakeFiles/src.dir/terrain3D.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$
 #############################################
 # Link the executable src.exe
 
-build src.exe: CXX_EXECUTABLE_LINKER__src_Debug CMakeFiles/src.dir/Constants.cpp.obj CMakeFiles/src.dir/EnemyGridCompact.cpp.obj CMakeFiles/src.dir/EnemyGridS.cpp.obj CMakeFiles/src.dir/EnemyGridXS.cpp.obj CMakeFiles/src.dir/EnemyGridXXS.cpp.obj CMakeFiles/src.dir/GridArray.cpp.obj CMakeFiles/src.dir/GridCell.cpp.obj CMakeFiles/src.dir/SelectionManager.cpp.obj CMakeFiles/src.dir/battlefield.cpp.obj CMakeFiles/src.dir/blitzunit.cpp.obj CMakeFiles/src.dir/register_types.cpp.obj CMakeFiles/src.dir/terrain3D.cpp.obj
+build src.exe: CXX_EXECUTABLE_LINKER__src_Debug CMakeFiles/src.dir/Constants.cpp.obj CMakeFiles/src.dir/GridCell.cpp.obj CMakeFiles/src.dir/SelectionManager.cpp.obj CMakeFiles/src.dir/UnitGridAbstractFactory.cpp.obj CMakeFiles/src.dir/UnitGridCompact.cpp.obj CMakeFiles/src.dir/UnitGridS.cpp.obj CMakeFiles/src.dir/UnitGridXS.cpp.obj CMakeFiles/src.dir/UnitGridXXS.cpp.obj CMakeFiles/src.dir/battlefield.cpp.obj CMakeFiles/src.dir/blitzunit.cpp.obj CMakeFiles/src.dir/register_types.cpp.obj CMakeFiles/src.dir/terrain3D.cpp.obj CMakeFiles/src.dir/grid/array/GridArray.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\src.dir

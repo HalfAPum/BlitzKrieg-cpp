@@ -13,7 +13,7 @@ inline void fill_initial_adjacent_cells(
     stack<GridCell> &stack,
     const int unit_x,
     const int unit_z,
-    EnemyGrid *enemy_grid
+    UnitGrid *enemy_grid
 ) {
     const int grid_size = enemy_grid->grid_size;
 

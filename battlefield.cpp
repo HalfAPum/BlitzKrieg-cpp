@@ -9,9 +9,10 @@
 #include "battlefield.h"
 
 #include "blitzunit.h"
-#include "EnemyGridXXS.h"
+#include "UnitGridXXS.h"
+#include "UnitGirdFactory.h"
 
-class EnemyGrid;
+class UnitGrid;
 
 void Battlefield::_ready() {
     for (int i = 1; i < 20; i+=3) {
@@ -24,6 +25,6 @@ void Battlefield::_ready() {
 
         add_child(instance);
 
-        EnemyGridXXS::instance()->add_enemy(instance);
+        enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(instance);
     }
 }

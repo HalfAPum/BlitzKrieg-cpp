@@ -15,10 +15,11 @@ add_executable(src ${SOURCE_FILES} ${SOURCES}
         Battlefield.h
         Battlefield.cpp
         Battlefield.h
-        EnemyGridXXS.h
-        EnemyGridXS.h
-        GridArray.h
-        fill_initial_adjacent_cells_algorithm.h)
+        UnitGridXXS.h
+        UnitGridXS.h
+        grid/array/GridArray.h
+        fill_initial_adjacent_cells_algorithm.h
+        grid/array/GridArray.cpp)
 #add_executable(src
 #        gdexample.cpp
 #        gdexample.h
