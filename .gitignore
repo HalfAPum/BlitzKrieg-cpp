@@ -1,10 +1,4 @@
 /cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-ce6e0d57934751f2b0bc.json
-/GridAbstactFactory.windows.template_debug.x86_64.obj
-/grid/array/GridArray.windows.template_debug.x86_64.obj
 /cmake-build-debug/.cmake/api/v1/reply/index-2024-08-09T22-08-10-0459.json
 /cmake-build-debug/.cmake/api/v1/reply/target-src-Debug-9eca55809b5718b4fd0f.json
-/UnitGridAbstractFactory.windows.template_debug.x86_64.obj
-/UnitGridCompact.windows.template_debug.x86_64.obj
-/UnitGridS.windows.template_debug.x86_64.obj
-/UnitGridXS.windows.template_debug.x86_64.obj
-/UnitGridXXS.windows.template_debug.x86_64.obj
+*.obj

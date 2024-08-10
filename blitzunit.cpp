@@ -25,6 +25,10 @@ void BlitzUnit::_bind_methods() {
 }
 
 void BlitzUnit::_ready() {
+    if (!isEnemy) {
+        UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
+    }
+
     const auto position = get_position();
     old_x = position.x;
     old_z = position.z;
@@ -46,10 +50,19 @@ void BlitzUnit::_ready() {
 }
 
 void BlitzUnit::on_grid_position_changed() {
-    if (!isEnemy) return;
+    get_unit_grid_factory(this)->grid_xxs->remove_enemy(this);
+    get_unit_grid_factory(this)->grid_xxs->add_enemy(this);
+    const auto position = get_position();
 
-    UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->remove_enemy(this);
-    UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
+    const int x = position.x;
+    const int z = position.z;
+    UtilityFunctions::print(x);
+    UtilityFunctions::print(old_x);
+    UtilityFunctions::print(z);
+    UtilityFunctions::print(old_z);
+    get_unit_grid_factory(this)->grid_s->print();
+    get_unit_grid_factory(this)->grid_xs->print();
+    get_unit_grid_factory(this)->grid_xxs->print();
 }
 
 constexpr int MOVE_SPEED = 4;
@@ -63,11 +76,15 @@ void BlitzUnit::check_grid_position_change() {
     const int z = position.z;
 
     if (x != old_x && x != 0 && old_x != 0) {
-        if (x % GRID_SIZE_XXS == 0 || old_x % GRID_SIZE_XXS == 0) {
+        if (x % GRID_SIZE_XXS == 0 && x == old_x + 1) {
+            on_grid_position_changed();
+        } else if (old_x % GRID_SIZE_XXS == 0 && old_x == x + 1) {
             on_grid_position_changed();
         }
     } else if (z != old_z && z != 0 && old_z != 0) {
-        if (z % GRID_SIZE_XXS == 0 || old_z % GRID_SIZE_XXS == 0) {
+        if (z % GRID_SIZE_XXS == 0 && z == old_z + 1) {
+            on_grid_position_changed();
+        } else if (old_z % GRID_SIZE_XXS == 0 && old_z == z + 1) {
             on_grid_position_changed();
         }
     }
