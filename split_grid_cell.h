@@ -9,7 +9,7 @@
 
 //Stable. Was tested.
 inline array<GridCell, 4> split_grid_cell(const GridCell &cell, const BlitzUnit* unit) {
-    UnitGrid* next_precision_enemy_grid = get_unit_grid_factory_enum(cell.unit_grid)->next_precision_grid(cell.unit_grid->grid_size);
+    UnitGrid* next_precision_enemy_grid = get_unit_grid_factory_enum(cell.unit_grid)->next_precision_grid(cell.unit_grid->grid_level);
 
     //Assme precision level goes up by two
     const int sx = cell.x * 2;

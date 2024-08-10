@@ -8,7 +8,7 @@
 #include "UnitGirdFactory.h"
 
 inline UnitGrid *get_previous_presicion_grid(const UnitGrid* unit_grid) {
-    return get_unit_grid_factory_enum(unit_grid)->previous_precision_grid(unit_grid->grid_size);
+    return get_unit_grid_factory_enum(unit_grid)->previous_precision_grid(unit_grid->grid_level);
 }
 
 void UnitGridXXS::add_enemy(BlitzUnit *unit) {
@@ -55,7 +55,7 @@ int UnitGridXXS::get_enemy_count(const int x, const int z) const {
 }
 
 void UnitGridXXS::print() const {
-    UtilityFunctions::print("EnemyGridXXS matrix");
+    UtilityFunctions::print("GridXXS matrix");
     for (int i = 0; i < ARRAY_SIZE_XXS; ++i) {
         string row;
         for (int j = 0; j < ARRAY_SIZE_XXS; ++j) {

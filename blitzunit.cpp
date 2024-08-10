@@ -41,15 +41,15 @@ void BlitzUnit::_ready() {
     search_enemy_timer->set_timer_process_callback(Timer::TimerProcessCallback::TIMER_PROCESS_PHYSICS);
     search_enemy_timer->connect("timeout", Callable(this, "_search_enemy"));
 
-    search_enemy_timer->set_wait_time(10);
+    search_enemy_timer->set_wait_time(5);
     search_enemy_timer->start();
 }
 
 void BlitzUnit::on_grid_position_changed() {
     if (!isEnemy) return;
 
-    enemy_unit_grid_abstract_factory->grid_xxs->remove_enemy(this);
-    enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
+    UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->remove_enemy(this);
+    UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
 }
 
 constexpr int MOVE_SPEED = 4;
@@ -179,12 +179,12 @@ UnitGrid* get_enemy_grid(const real_t radius) {
     const real_t minumum_grid_size = radius;
 
     if (minumum_grid_size <= 4) {
-        return enemy_unit_grid_abstract_factory->grid_xxs_cast;
+        return UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs_cast;
     }
     if (minumum_grid_size <= 8) {
-        return enemy_unit_grid_abstract_factory->grid_xs;
+        return UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xs;
     }
-    return enemy_unit_grid_abstract_factory->grid_s;
+    return UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_s;
 }
 
 constexpr unsigned MAP_SIZE = 32;

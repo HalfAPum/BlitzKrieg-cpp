@@ -4,8 +4,6 @@
 
 #include "terrain3D.h"
 
-#include <godot_cpp/variant/utility_functions.hpp>
-
 #include "blitzunit.h"
 #include "Constants.h"
 #include "SelectionManager.h"

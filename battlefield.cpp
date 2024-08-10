@@ -25,6 +25,6 @@ void Battlefield::_ready() {
 
         add_child(instance);
 
-        enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(instance);
+        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(instance);
     }
 }

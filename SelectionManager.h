@@ -12,7 +12,6 @@ class BlitzUnit;
 using namespace godot;
 
 class SelectionManager {
-private:
     SelectionManager() {}
 public:
     SelectionManager(SelectionManager const&) = delete;

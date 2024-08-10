@@ -13,7 +13,6 @@ using namespace godot;
 using namespace std;
 
 class Constants {
-private:
     Constants() {}
 public:
     Constants(Constants const&) = delete;

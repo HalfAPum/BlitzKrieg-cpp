@@ -20,19 +20,22 @@ public:
     UnitGrid* grid_xxs_cast = nullptr;
     UnitGrid* grid_xs = nullptr;
     UnitGrid* grid_s = nullptr;
+    UnitGridType type = PLAYER;
+    map<int, UnitGrid*> precision_map {};
 
     explicit UnitGridAbstractFactory(const UnitGridType unit_grid_type) :
     grid_xxs(new UnitGridXXS(unit_grid_type)),
     grid_xxs_cast(grid_xxs),
-    grid_xs(new UnitGridXXS(unit_grid_type)),
-    grid_s(new UnitGridXXS(unit_grid_type))
-    {}
-
-    map<int, UnitGrid*> precision_map {
+    grid_xs(new UnitGridXS(unit_grid_type)),
+    grid_s(new UnitGridS(unit_grid_type)),
+    type(unit_grid_type),
+    precision_map({
         { GRID_LEVEL_XXS, grid_xxs },
         { GRID_LEVEL_XS, grid_xs },
         { GRID_LEVEL_S, grid_s }
-    };
+    }) {
+        // UtilityFunctions::print("FUCK CONSTRUCTOR CALL!!");
+    }
 
     UnitGrid *next_precision_grid(int grid_level) const;
 

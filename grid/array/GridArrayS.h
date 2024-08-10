@@ -20,7 +20,7 @@ public:
     GridArrayS() : GridArray(GRID_SIZE_S, GRID_SIZE_S) {}
 
     void print() const override {
-        UtilityFunctions::print("EnemyGridS matrix");
+        UtilityFunctions::print("GridS matrix");
         for (int i = 0; i < ARRAY_SIZE_S; ++i) {
             string row;
             for (int j = 0; j < ARRAY_SIZE_S; ++j) {
