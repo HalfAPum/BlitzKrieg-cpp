@@ -1,3 +1,0 @@
-C:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/cmake-build-debug/CMakeFiles/src.dir
-C:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
