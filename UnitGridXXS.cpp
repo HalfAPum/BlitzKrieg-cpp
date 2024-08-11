@@ -67,4 +67,9 @@ void UnitGridXXS::print() const {
     }
 }
 
+vector<BlitzUnit*> UnitGridXXS::get_units(const int x, const int z) {
+    return units_array[x][z];
+}
+
+
 

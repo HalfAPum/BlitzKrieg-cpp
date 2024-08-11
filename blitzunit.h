@@ -20,6 +20,7 @@ class UnitGridXXS;
 using namespace godot;
 
 constexpr double DEFAULT_LAST_ROTATION = -999999999.999999999;
+constexpr unsigned MAP_SIZE = 32;
 
 class BlitzUnit : public CharacterBody3D {
     GDCLASS(BlitzUnit, CharacterBody3D)

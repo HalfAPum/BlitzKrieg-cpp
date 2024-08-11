@@ -198,7 +198,6 @@ UnitGrid* get_enemy_grid(const real_t radius) {
     return UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_s;
 }
 
-constexpr unsigned MAP_SIZE = 32;
 
 BlitzUnit* findEnemy(const BlitzUnit *unit) {
     auto position = unit->get_position();

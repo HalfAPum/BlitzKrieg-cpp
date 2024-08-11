@@ -14,8 +14,10 @@
 #include <godot_cpp/classes/physics_direct_space_state3d.hpp>
 #include <godot_cpp/classes/physics_ray_query_parameters3d.hpp>
 #include <godot_cpp/classes/world3d.hpp>
+#include <godot_cpp/classes/geometry2d.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
+#include "UnitGirdFactory.h"
 #include "UnitGridXXS.h"
 #include "vector2/vector2_scan.h"
 
@@ -143,26 +145,79 @@ std::array<Vector2, 4> Terrain3D::ray_cast_ui_rect() const {
     };
 }
 
+//If this is perfomance concern you can consider checking not the whole quadrilateral
+//but only single line which intersects grid (if only 1 line intersects it).
+bool is_inside_quadrilateral(const BlitzUnit* unit, const std::array<Vector2, 4> &quadrilateral) {
+    const auto unit_position = unit->get_position();
+    const auto unit_position2D = Vector2(unit_position.x, unit_position.z);
+
+    PackedVector2Array packed_vector2_array;
+    for (auto vertice : quadrilateral) {
+        packed_vector2_array.append(vertice);
+    }
+
+    return Geometry2D::get_singleton()->is_point_in_polygon(unit_position2D, packed_vector2_array);
+}
+
+void save_select_units(
+    std::set<pair<int, int>> &scan_set,
+    std::vector<BlitzUnit*> &select_units,
+    const std::array<Vector2, 4> &quadrilateral,
+    const bool validate_position_in_qiadrilateral
+) {
+    for (const auto &grid : scan_set) {
+        const int x = grid.first;
+        const int z = grid.second;
+
+        if (x < 0 || x >= MAP_SIZE / GRID_SIZE_XXS) continue;
+        if (z < 0 || z >= MAP_SIZE / GRID_SIZE_XXS) continue;
+
+        auto grid_units = UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs->get_units(x, z);
+
+        for (auto *unit : grid_units) {
+            if (validate_position_in_qiadrilateral && !is_inside_quadrilateral(unit, quadrilateral)) {
+                continue;
+            }
+
+            select_units.push_back(unit);
+        }
+    }
+
+    scan_set.clear();
+}
+
 void Terrain3D::select_in_quadrilateral(const std::array<Vector2, 4> &quadrilateral) {
-    std::set<pair<int, int>> scan_set;
+    std::set<pair<int, int>> scan_set {};
 
     auto emplace_lambda = [](const int axis_coordinate) { return axis_coordinate / GRID_SIZE_XXS; };
 
+    //Scan quadrilateral frame
     scan_line(quadrilateral[0], quadrilateral[1], scan_set, emplace_lambda);
     scan_line(quadrilateral[1], quadrilateral[2], scan_set, emplace_lambda);
     scan_line(quadrilateral[2], quadrilateral[3], scan_set, emplace_lambda);
     scan_line(quadrilateral[3], quadrilateral[0], scan_set, emplace_lambda);
 
-    UtilityFunctions::print("SELECT GridXXS matrix");
-    for (int i = 0; i < ARRAY_SIZE_XXS; ++i) {
-        string row;
-        for (int j = 0; j < ARRAY_SIZE_XXS; ++j) {
-            row += std::to_string(scan_set.find({j, i}) != scan_set.end()) + ' ';
-        }
-        char arr[1024];
-        strcpy(arr, row.c_str());
-        UtilityFunctions::print(arr);
-    }
+    std::vector<BlitzUnit*> select_units {};
 
-    //scan inner quadrilateral grids
+    // UtilityFunctions::print("SELECT GridXXS matrix");
+    // for (int i = 0; i < ARRAY_SIZE_XXS; ++i) {
+    //     string row;
+    //     for (int j = 0; j < ARRAY_SIZE_XXS; ++j) {
+    //         row += std::to_string(scan_set.find({j, i}) != scan_set.end()) + ' ';
+    //     }
+    //     char arr[1024];
+    //     strcpy(arr, row.c_str());
+    //     UtilityFunctions::print(arr);
+    // }
+
+    //Save units of quadrilateral frame
+    save_select_units(scan_set, select_units, quadrilateral, true);
+
+    //Scan inner quadrilateral grids
+
+    //Save units inside quadrilateral frame
+    save_select_units(scan_set, select_units, quadrilateral, false);
+
+    //Select units
+    SelectionManager::getInstance().selectAll(select_units);
 }
