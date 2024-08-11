@@ -7,6 +7,7 @@
 
 #include <godot_cpp/classes/character_body3d.hpp>
 #include <godot_cpp/classes/camera3d.hpp>
+#include <godot_cpp/classes/sprite3d.hpp>
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/timer.hpp>
 
@@ -51,6 +52,7 @@ private:
     //selection
     bool leftButtonPressed = false;
     bool selected = false;
+    Sprite3D *selected_circle = nullptr;
 
     //moving
     Vector3 movePosition;

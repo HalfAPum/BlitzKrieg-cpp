@@ -25,6 +25,9 @@ void BlitzUnit::_bind_methods() {
 }
 
 void BlitzUnit::_ready() {
+    selected_circle = get_node<Sprite3D>("selected_circle");
+    selected_circle->set_visible(false);
+
     if (!isEnemy) {
         UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
     }
@@ -52,17 +55,6 @@ void BlitzUnit::_ready() {
 void BlitzUnit::on_grid_position_changed() {
     get_unit_grid_factory(this)->grid_xxs->remove_enemy(this);
     get_unit_grid_factory(this)->grid_xxs->add_enemy(this);
-    const auto position = get_position();
-
-    const int x = position.x;
-    const int z = position.z;
-    UtilityFunctions::print(x);
-    UtilityFunctions::print(old_x);
-    UtilityFunctions::print(z);
-    UtilityFunctions::print(old_z);
-    get_unit_grid_factory(this)->grid_s->print();
-    get_unit_grid_factory(this)->grid_xs->print();
-    get_unit_grid_factory(this)->grid_xxs->print();
 }
 
 constexpr int MOVE_SPEED = 4;
@@ -153,10 +145,12 @@ void BlitzUnit::_physics_process(const double p_delta) {
 
 void BlitzUnit::select() {
     selected = true;
+    selected_circle->set_visible(true);
 }
 
 void BlitzUnit::unselect() {
     selected = false;
+    selected_circle->set_visible(false);
 }
 
 void BlitzUnit::_input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event, const Vector3 &p_position, const Vector3 &p_normal, int32_t p_shape_idx) {

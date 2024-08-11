@@ -119,6 +119,13 @@ build CMakeFiles/src.dir/blitzunit.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$
   OBJECT_DIR = CMakeFiles\src.dir
   OBJECT_FILE_DIR = CMakeFiles\src.dir
 
+build CMakeFiles/src.dir/grid/array/GridArray.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/grid/array/GridArray.cpp || cmake_object_order_depends_target_src
+  DEP_FILE = CMakeFiles\src.dir\grid\array\GridArray.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
+  OBJECT_DIR = CMakeFiles\src.dir
+  OBJECT_FILE_DIR = CMakeFiles\src.dir\grid\array
+
 build CMakeFiles/src.dir/register_types.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/register_types.cpp || cmake_object_order_depends_target_src
   DEP_FILE = CMakeFiles\src.dir\register_types.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
@@ -133,13 +140,6 @@ build CMakeFiles/src.dir/terrain3D.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$
   OBJECT_DIR = CMakeFiles\src.dir
   OBJECT_FILE_DIR = CMakeFiles\src.dir
 
-build CMakeFiles/src.dir/grid/array/GridArray.cpp.obj: CXX_COMPILER__src_unscanned_Debug C$:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/src/grid/array/GridArray.cpp || cmake_object_order_depends_target_src
-  DEP_FILE = CMakeFiles\src.dir\grid\array\GridArray.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include -IC:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/include
-  OBJECT_DIR = CMakeFiles\src.dir
-  OBJECT_FILE_DIR = CMakeFiles\src.dir\grid\array
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target src
@@ -148,7 +148,7 @@ build CMakeFiles/src.dir/grid/array/GridArray.cpp.obj: CXX_COMPILER__src_unscann
 #############################################
 # Link the executable src.exe
 
-build src.exe: CXX_EXECUTABLE_LINKER__src_Debug CMakeFiles/src.dir/Constants.cpp.obj CMakeFiles/src.dir/GridCell.cpp.obj CMakeFiles/src.dir/SelectionManager.cpp.obj CMakeFiles/src.dir/UnitGridAbstractFactory.cpp.obj CMakeFiles/src.dir/UnitGridCompact.cpp.obj CMakeFiles/src.dir/UnitGridS.cpp.obj CMakeFiles/src.dir/UnitGridXS.cpp.obj CMakeFiles/src.dir/UnitGridXXS.cpp.obj CMakeFiles/src.dir/battlefield.cpp.obj CMakeFiles/src.dir/blitzunit.cpp.obj CMakeFiles/src.dir/register_types.cpp.obj CMakeFiles/src.dir/terrain3D.cpp.obj CMakeFiles/src.dir/grid/array/GridArray.cpp.obj
+build src.exe: CXX_EXECUTABLE_LINKER__src_Debug CMakeFiles/src.dir/Constants.cpp.obj CMakeFiles/src.dir/GridCell.cpp.obj CMakeFiles/src.dir/SelectionManager.cpp.obj CMakeFiles/src.dir/UnitGridAbstractFactory.cpp.obj CMakeFiles/src.dir/UnitGridCompact.cpp.obj CMakeFiles/src.dir/UnitGridS.cpp.obj CMakeFiles/src.dir/UnitGridXS.cpp.obj CMakeFiles/src.dir/UnitGridXXS.cpp.obj CMakeFiles/src.dir/battlefield.cpp.obj CMakeFiles/src.dir/blitzunit.cpp.obj CMakeFiles/src.dir/grid/array/GridArray.cpp.obj CMakeFiles/src.dir/register_types.cpp.obj CMakeFiles/src.dir/terrain3D.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\src.dir
