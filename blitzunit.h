@@ -9,6 +9,7 @@
 #include <godot_cpp/classes/camera3d.hpp>
 #include <godot_cpp/classes/sprite3d.hpp>
 #include <godot_cpp/classes/input_event.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/timer.hpp>
 
 class SelectionManager;
@@ -42,7 +43,7 @@ public:
     bool isAlly = false;
 
     //attack
-    const int attack_radius = 9;
+    const int attack_radius = 100;
 
     //Previous position
     int old_x = 0;
@@ -61,12 +62,21 @@ private:
     bool isRotating = false;
     double last_rotation = DEFAULT_LAST_ROTATION;
 
+    //attack
+    bool isAttacking = false;
+
     //timer
     Timer *search_enemy_timer = nullptr;
+
+    //Projectile
+    Node3D *bullet_spawn = nullptr;
+    Ref<PackedScene> projectile_scene {};
 
     void _search_enemy();
 
     void prepare_to_attack(const BlitzUnit* enemy);
+
+    void start_attack();
 
     void rotate(double p_delta);
 

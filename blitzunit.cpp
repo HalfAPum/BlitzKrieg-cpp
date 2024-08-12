@@ -9,6 +9,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/world3d.hpp>
 #include <godot_cpp/classes/physics_direct_space_state3d.hpp>
+#include <godot_cpp/classes/resource_loader.hpp>
 
 #include "can_attack_enemy_algorithm.h"
 #include "Constants.h"
@@ -19,6 +20,7 @@
 #include "SelectionManager.h"
 #include "split_grid_cell.h"
 #include "UnitGirdFactory.h"
+#include "projectile/sampleprojectile.h"
 
 void BlitzUnit::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_search_enemy"), &BlitzUnit::_search_enemy);
@@ -27,6 +29,9 @@ void BlitzUnit::_bind_methods() {
 void BlitzUnit::_ready() {
     selected_circle = get_node<Sprite3D>("selected_circle");
     selected_circle->set_visible(false);
+
+    bullet_spawn = get_node<Node3D>("BulletSpawn");
+    projectile_scene = ResourceLoader::get_singleton()->load("res://sample_projectile.tscn");
 
     if (!isEnemy) {
         UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs->add_enemy(this);
@@ -109,6 +114,8 @@ void BlitzUnit::rotate(const double p_delta) {
     if (abs(currentRotation - last_rotation) <= 0.001) {
         isRotating = false;
         last_rotation = DEFAULT_LAST_ROTATION;
+
+        if (isAttacking) start_attack();
         return;
     }
 
@@ -250,5 +257,19 @@ void BlitzUnit::_search_enemy() {
 void BlitzUnit::prepare_to_attack(const BlitzUnit* enemy) {
     isMoving = false;
     movePosition = enemy->get_position();
+    isAttacking = true;
     isRotating = true;
+}
+
+void BlitzUnit::start_attack() {
+    auto *projectile = dynamic_cast<SampleProjectile*>(projectile_scene->instantiate());
+    projectile->use_remote_timer = true;
+
+    add_sibling(projectile);
+
+    projectile->set_global_transform(bullet_spawn->get_global_transform());
+
+
+
+    projectile->set_linear_velocity(projectile->get_position().direction_to(movePosition) * projectile->speed);
 }

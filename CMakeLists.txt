@@ -9,6 +9,8 @@ file(GLOB SOURCES
         grid/array/*.h
         vector2/*.cpp
         vector2/*.h
+        projectile/*.cpp
+        projectile/*.h
 )
 
 add_executable(src ${SOURCE_FILES} ${SOURCES}
