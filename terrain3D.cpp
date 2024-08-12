@@ -110,7 +110,11 @@ void Terrain3D::_input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event,
     } else if (leftButtonDrag && p_event->is_action_released(Constants::getInstance().LEFT_CLICK)) {
         leftButtonDrag = false;
         ui_rect->set_visible(false);
-        ray_cast_quadrilateral = true;
+        if (drag_rect_area.size.length_squared() > MIN_DRAG_LENGH_SQ) {
+            ray_cast_quadrilateral = true;
+        } else if (!shiftButtonPressed) {
+            SelectionManager::getInstance().unselectAll();
+        }
     } else if (p_event->is_action_pressed(Constants::getInstance().RIGHT_CLICK)) {
         rightButtonPressed = true;
         pressedPosition = p_position;
@@ -218,7 +222,7 @@ Vector2 Terrain3D::get_position3d_from(const Vector2 &position2d) const {
 
 void Terrain3D::_physics_process(double p_delta) {
     if (ray_cast_quadrilateral) {
-        auto quadrilateral = ray_cast_ui_rect();
+        const auto quadrilateral = ray_cast_ui_rect();
         select_in_quadrilateral(quadrilateral);
 
         ray_cast_quadrilateral = false;
