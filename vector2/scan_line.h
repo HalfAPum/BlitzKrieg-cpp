@@ -6,8 +6,9 @@
 #define VECTOR2_SCAN_H
 #include <algorithm>
 #include <utility>
-#include <set>
+#include <unordered_set>
 #include <godot_cpp/variant/vector2.hpp>
+#include "hashfunction.h"
 
 using namespace godot;
 
@@ -31,7 +32,7 @@ constexpr int DEFAULT_SCAN_JUMP = 1;
 inline void scan_line(
     const Vector2 &start,
     const Vector2 &end,
-    std::set<pair<int, int>> &scan_set,
+    std::unordered_set<Vector2, HashFunction> &scan_set,
     int (*emplace_lambda) (int axis_coordinate)
 ) {
     const auto axis_increment_pair = get_axis_increments(start, end, DEFAULT_SCAN_JUMP);

@@ -27,7 +27,7 @@ public:
     void _physics_process(double p_delta) override;
 
     std::array<Vector2, 4> ray_cast_ui_rect() const;
-    void select_in_quadrilateral(const std::array<Vector2, 4> &quadrilateral);
+    void select_in_quadrilateral(const std::array<Vector2, 4> &quadrilateral) const;
 protected:
     static void _bind_methods() {}
 private:

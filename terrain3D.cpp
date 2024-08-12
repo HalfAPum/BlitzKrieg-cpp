@@ -5,6 +5,8 @@
 #include "terrain3D.h"
 
 #include <set>
+#include <stack>
+#include <unordered_set>
 #include <godot_cpp/classes/resource_loader.hpp>
 
 #include "blitzunit.h"
@@ -19,7 +21,10 @@
 
 #include "UnitGirdFactory.h"
 #include "UnitGridXXS.h"
-#include "vector2/vector2_scan.h"
+#include "vector2/hashfunction.h"
+#include "vector2/quadrilateral.h"
+#include "vector2/scan_inner_quadrilateral_grids.h"
+#include "vector2/scan_line.h"
 
 
 namespace godot {
@@ -160,19 +165,20 @@ bool is_inside_quadrilateral(const BlitzUnit* unit, const std::array<Vector2, 4>
 }
 
 void save_select_units(
-    std::set<pair<int, int>> &scan_set,
+    std::unordered_set<Vector2, HashFunction> &scan_set,
     std::vector<BlitzUnit*> &select_units,
     const std::array<Vector2, 4> &quadrilateral,
     const bool validate_position_in_qiadrilateral
 ) {
     for (const auto &grid : scan_set) {
-        const int x = grid.first;
-        const int z = grid.second;
+        const int x = grid.x;
+        const int z = grid.y;
 
         if (x < 0 || x >= MAP_SIZE / GRID_SIZE_XXS) continue;
         if (z < 0 || z >= MAP_SIZE / GRID_SIZE_XXS) continue;
 
-        auto grid_units = UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs->get_units(x, z);
+        auto grid_units = UnitGridFactory::instance().player_unit_grid_abstract_factory->
+            grid_xxs->get_units(x, z);
 
         for (auto *unit : grid_units) {
             if (validate_position_in_qiadrilateral && !is_inside_quadrilateral(unit, quadrilateral)) {
@@ -183,11 +189,11 @@ void save_select_units(
         }
     }
 
-    scan_set.clear();
+    // scan_set.clear();
 }
 
-void Terrain3D::select_in_quadrilateral(const std::array<Vector2, 4> &quadrilateral) {
-    std::set<pair<int, int>> scan_set {};
+void Terrain3D::select_in_quadrilateral(const std::array<Vector2, 4> &quadrilateral) const {
+    std::unordered_set<Vector2, HashFunction> scan_set {};
 
     auto emplace_lambda = [](const int axis_coordinate) { return axis_coordinate / GRID_SIZE_XXS; };
 
@@ -199,21 +205,11 @@ void Terrain3D::select_in_quadrilateral(const std::array<Vector2, 4> &quadrilate
 
     std::vector<BlitzUnit*> select_units {};
 
-    // UtilityFunctions::print("SELECT GridXXS matrix");
-    // for (int i = 0; i < ARRAY_SIZE_XXS; ++i) {
-    //     string row;
-    //     for (int j = 0; j < ARRAY_SIZE_XXS; ++j) {
-    //         row += std::to_string(scan_set.find({j, i}) != scan_set.end()) + ' ';
-    //     }
-    //     char arr[1024];
-    //     strcpy(arr, row.c_str());
-    //     UtilityFunctions::print(arr);
-    // }
-
     //Save units of quadrilateral frame
     save_select_units(scan_set, select_units, quadrilateral, true);
 
     //Scan inner quadrilateral grids
+    scan_inner_quadrilateral_grids(quadrilateral, drag_rect_area, scan_set, emplace_lambda);
 
     //Save units inside quadrilateral frame
     save_select_units(scan_set, select_units, quadrilateral, false);
