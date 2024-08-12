@@ -79,6 +79,7 @@ inline void push_bottom_left(
 inline void scan_inner_quadrilateral_grids(
     const std::array<Vector2, 4> &quadrilateral_array,
     const Rect2 &drag_rect_area,
+    std::unordered_set<Vector2, HashFunction> &frame_scan_set,
     std::unordered_set<Vector2, HashFunction> &scan_set,
     int (*axis_converter) (int axis_coordinate)
 ) {
@@ -128,6 +129,7 @@ inline void scan_inner_quadrilateral_grids(
         auto grid = stack.top();
         stack.pop();
 
+        if (frame_scan_set.find(grid) != frame_scan_set.end()) continue;
         if (scan_set.find(grid) != scan_set.end()) continue;
 
         const int x = grid.x;

@@ -188,31 +188,30 @@ void save_select_units(
             select_units.push_back(unit);
         }
     }
-
-    // scan_set.clear();
 }
 
 void Terrain3D::select_in_quadrilateral(const std::array<Vector2, 4> &quadrilateral) const {
-    std::unordered_set<Vector2, HashFunction> scan_set {};
+    std::unordered_set<Vector2, HashFunction> frame_scan_set {};
+    std::unordered_set<Vector2, HashFunction> inside_scan_set {};
 
     auto emplace_lambda = [](const int axis_coordinate) { return axis_coordinate / GRID_SIZE_XXS; };
 
     //Scan quadrilateral frame
-    scan_line(quadrilateral[0], quadrilateral[1], scan_set, emplace_lambda);
-    scan_line(quadrilateral[1], quadrilateral[2], scan_set, emplace_lambda);
-    scan_line(quadrilateral[2], quadrilateral[3], scan_set, emplace_lambda);
-    scan_line(quadrilateral[3], quadrilateral[0], scan_set, emplace_lambda);
+    scan_line(quadrilateral[0], quadrilateral[1], frame_scan_set, emplace_lambda);
+    scan_line(quadrilateral[1], quadrilateral[2], frame_scan_set, emplace_lambda);
+    scan_line(quadrilateral[2], quadrilateral[3], frame_scan_set, emplace_lambda);
+    scan_line(quadrilateral[3], quadrilateral[0], frame_scan_set, emplace_lambda);
 
     std::vector<BlitzUnit*> select_units {};
 
     //Save units of quadrilateral frame
-    save_select_units(scan_set, select_units, quadrilateral, true);
+    save_select_units(frame_scan_set, select_units, quadrilateral, true);
 
     //Scan inner quadrilateral grids
-    scan_inner_quadrilateral_grids(quadrilateral, drag_rect_area, scan_set, emplace_lambda);
+    scan_inner_quadrilateral_grids(quadrilateral, drag_rect_area, frame_scan_set, inside_scan_set, emplace_lambda);
 
     //Save units inside quadrilateral frame
-    save_select_units(scan_set, select_units, quadrilateral, false);
+    save_select_units(inside_scan_set, select_units, quadrilateral, false);
 
     //Select units
     SelectionManager::getInstance().selectAll(select_units);
