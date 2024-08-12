@@ -27,7 +27,12 @@ void BlitzUnit::_bind_methods() {
 }
 
 void BlitzUnit::_ready() {
-    selected_circle = get_node<Sprite3D>("selected_circle");
+    if (isEnemy) {
+        selected_circle = get_node<Sprite3D>("selected_circle_enemy");
+    } else {
+        selected_circle = get_node<Sprite3D>("selected_circle");
+    }
+
     selected_circle->set_visible(false);
 
     bullet_spawn = get_node<Node3D>("BulletSpawn");
