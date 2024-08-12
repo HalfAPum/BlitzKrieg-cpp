@@ -31,6 +31,8 @@ public:
     void _ready() override;
     void _process(double p_delta) override;
     void _physics_process(double p_delta) override;
+    void detect_unit_collisions();
+    void detect_unit_collisions(const Vector2 &position, UnitGridXXS *grid);
 
     void select();
     void unselect();
@@ -45,7 +47,9 @@ public:
 
     //selection
     bool selected = false;
-    const real_t selection_radius = 0.8;
+    const real_t selection_radius = 1.5;
+
+    const real_t collision_radius = 3;
 
 
     //Previous position

@@ -33,9 +33,7 @@ public:
         { GRID_LEVEL_XXS, grid_xxs },
         { GRID_LEVEL_XS, grid_xs },
         { GRID_LEVEL_S, grid_s }
-    }) {
-        // UtilityFunctions::print("FUCK CONSTRUCTOR CALL!!");
-    }
+    }) {}
 
     UnitGrid *next_precision_grid(int grid_level) const;
 

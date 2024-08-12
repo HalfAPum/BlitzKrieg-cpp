@@ -9,8 +9,6 @@
 #include "battlefield.h"
 
 #include "blitzunit.h"
-#include "UnitGridXXS.h"
-#include "UnitGirdFactory.h"
 
 class UnitGrid;
 
@@ -18,13 +16,10 @@ void Battlefield::_ready() {
     for (int i = 1; i < 20; i+=3) {
         Ref<PackedScene> scene = ResourceLoader::get_singleton()->load("res://blitz_unit.tscn");
         auto *instance = dynamic_cast<BlitzUnit*>(scene->instantiate());
+        instance->isEnemy = true;
 
         instance->set_position(Vector3(i,0.5,1));
 
-        instance->isEnemy = true;
-
         add_child(instance);
-
-        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->add_enemy(instance);
     }
 }
