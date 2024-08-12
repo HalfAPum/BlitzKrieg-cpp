@@ -36,7 +36,7 @@ public:
 
     void print() const override;
 
-    vector<BlitzUnit*> get_units(int x, int z);
+    vector<BlitzUnit*> get_units(int x, int z) override;
 };
 
 

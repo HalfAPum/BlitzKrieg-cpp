@@ -25,7 +25,8 @@ public:
     void select(BlitzUnit *unit);
     void selectAll(const std::vector<BlitzUnit*> &select_units);
 
-    void free_unit(BlitzUnit *unit);
+    void add_selection(BlitzUnit *unit);
+    void remove_selection(BlitzUnit *unit);
     void unselectAll();
 
     std::vector<BlitzUnit*> selected_units = {};

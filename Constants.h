@@ -28,8 +28,12 @@ public:
 
     float gravity = ProjectSettings::get_singleton()->get_setting("physics/3d/default_gravity");
 
+    //Mouse
     const StringName LEFT_CLICK = StringName("LeftClick");
     const StringName RIGHT_CLICK = StringName("RightClick");
+
+    //Keyboard
+    const StringName SHIFT = StringName("Shift");
 };
 
 

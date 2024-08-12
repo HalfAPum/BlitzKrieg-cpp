@@ -4,8 +4,9 @@
 
 #ifndef GRIDCELL_H
 #define GRIDCELL_H
+#include <godot_cpp/variant/utility_functions.hpp>
+
 #include "UnitGrid.h"
-#include "UnitGridXXS.h"
 
 class UnitGrid;
 

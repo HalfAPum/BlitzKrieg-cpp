@@ -12,10 +12,9 @@
 #include <godot_cpp/classes/resource_loader.hpp>
 
 #include "can_attack_enemy_algorithm.h"
-#include "Constants.h"
 #include "UnitGrid.h"
 #include "UnitGridXXS.h"
-#include "fill_initial_adjacent_cells_algorithm.h"
+#include "fill_reachable_cells.h"
 #include "GridCell.h"
 #include "SelectionManager.h"
 #include "split_grid_cell.h"
@@ -95,6 +94,7 @@ void BlitzUnit::check_grid_position_change() {
     old_z = z;
 }
 
+const auto stable_y_coord = Vector3(0, 0.5, 0);
 
 void BlitzUnit::_process(double p_delta) {
     if (!isMoving || isRotating) return;
@@ -107,8 +107,11 @@ void BlitzUnit::_process(double p_delta) {
         isMoving = false;
     }
 
-    const auto direction = position.direction_to(movePosition);
-    set_velocity(direction * MOVE_SPEED);
+    const auto direction = position.direction_to(movePosition) + stable_y_coord;
+    const auto target_velocity = Vector3(direction.x * MOVE_SPEED, 0, direction.z * MOVE_SPEED);
+    // very fun jumping effect
+    // set_velocity(direction * MOVE_SPEED);
+    set_velocity(target_velocity);
 
     move_and_slide();
 }
@@ -165,24 +168,6 @@ void BlitzUnit::unselect() {
     selected_circle->set_visible(false);
 }
 
-void BlitzUnit::_input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event, const Vector3 &p_position, const Vector3 &p_normal, int32_t p_shape_idx) {
-    if (!p_event->is_action_type()) {
-        leftButtonPressed = false;
-        return;
-    }
-
-    if (selected) return;
-
-
-    if (p_event->is_action_pressed(Constants::getInstance().LEFT_CLICK)) {
-        leftButtonPressed = true;
-    } else if (leftButtonPressed && p_event->is_action_released(Constants::getInstance().LEFT_CLICK)) {
-        leftButtonPressed = false;
-        select();
-        SelectionManager::getInstance().select(this);
-    }
-}
-
 void BlitzUnit::move_command(const Vector3 &vector3) {
     movePosition = vector3;
     isRotating = true;
@@ -192,7 +177,7 @@ void BlitzUnit::move_command(const Vector3 &vector3) {
 
 BlitzUnit::~BlitzUnit() {
     if (selected) {
-        SelectionManager::getInstance().free_unit(this);
+        SelectionManager::getInstance().remove_selection(this);
     }
 
     delete search_enemy_timer;
@@ -216,7 +201,7 @@ BlitzUnit* findEnemy(const BlitzUnit *unit) {
 
     stack<GridCell> stack;
 
-    fill_initial_adjacent_cells(stack, position.x, position.z, get_enemy_grid(unit->attack_radius));
+    fill_reachable_cells(stack, position.x, position.z, get_enemy_grid(unit->attack_radius));
 
     while (!stack.empty()) {
         auto grid_cell = stack.top();
@@ -278,3 +263,8 @@ void BlitzUnit::start_attack() {
 
     projectile->set_linear_velocity(projectile->get_position().direction_to(movePosition) * projectile->speed);
 }
+
+void BlitzUnit::move_to_the_enemy_then_attack(BlitzUnit *enemy) {
+    UtilityFunctions::print("Move to the enemy then attack");
+}
+

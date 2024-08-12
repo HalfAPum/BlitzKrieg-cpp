@@ -9,13 +9,13 @@
 #include "GridCell.h"
 
 //Stable. Corvered with custom tests in separate project.
-inline void fill_initial_adjacent_cells(
+inline void fill_reachable_cells(
     stack<GridCell> &stack,
     const int unit_x,
     const int unit_z,
-    UnitGrid *enemy_grid
+    UnitGrid *unit_grid
 ) {
-    const int grid_size = enemy_grid->grid_size;
+    const int grid_size = unit_grid->grid_size;
 
     const int grid_x = unit_x / grid_size;
     const int grid_z = unit_z / grid_size;
@@ -31,16 +31,16 @@ inline void fill_initial_adjacent_cells(
             //Top
 
             //Left-top
-            stack.emplace(grid_x - 1, grid_z, enemy_grid);
-            stack.emplace(grid_x - 1, grid_z - 1, enemy_grid);
-            stack.emplace(grid_x, grid_z - 1, enemy_grid);
+            stack.emplace(grid_x - 1, grid_z, unit_grid);
+            stack.emplace(grid_x - 1, grid_z - 1, unit_grid);
+            stack.emplace(grid_x, grid_z - 1, unit_grid);
         } else {
             //Bottom
 
             //Left-Bottom
-            stack.emplace(grid_x - 1, grid_z, enemy_grid);
-            stack.emplace(grid_x - 1, grid_z + 1, enemy_grid);
-            stack.emplace(grid_x, grid_z + 1, enemy_grid);
+            stack.emplace(grid_x - 1, grid_z, unit_grid);
+            stack.emplace(grid_x - 1, grid_z + 1, unit_grid);
+            stack.emplace(grid_x, grid_z + 1, unit_grid);
         }
     } else {
         //Right
@@ -48,19 +48,19 @@ inline void fill_initial_adjacent_cells(
         if (zmod < half_grid) {
             //Top
             //Right-top
-            stack.emplace(grid_x, grid_z - 1, enemy_grid);
-            stack.emplace(grid_x + 1, grid_z - 1, enemy_grid);
-            stack.emplace(grid_x + 1, grid_z, enemy_grid);
+            stack.emplace(grid_x, grid_z - 1, unit_grid);
+            stack.emplace(grid_x + 1, grid_z - 1, unit_grid);
+            stack.emplace(grid_x + 1, grid_z, unit_grid);
         } else {
             //Bottom
             //Right-bottom
-            stack.emplace(grid_x, grid_z + 1, enemy_grid);
-            stack.emplace(grid_x + 1, grid_z + 1, enemy_grid);
-            stack.emplace(grid_x + 1, grid_z, enemy_grid);
+            stack.emplace(grid_x, grid_z + 1, unit_grid);
+            stack.emplace(grid_x + 1, grid_z + 1, unit_grid);
+            stack.emplace(grid_x + 1, grid_z, unit_grid);
         }
     }
 
-    stack.emplace(grid_x, grid_z, enemy_grid);
+    stack.emplace(grid_x, grid_z, unit_grid);
 }
 
 #endif //FILL_INITIAL_ADJACENT_CELLS_ALGORITHM_H

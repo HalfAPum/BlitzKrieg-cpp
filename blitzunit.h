@@ -32,8 +32,6 @@ public:
     void _process(double p_delta) override;
     void _physics_process(double p_delta) override;
 
-    void _input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event, const Vector3 &p_position, const Vector3 &p_normal, int32_t p_shape_idx) override;
-
     void select();
     void unselect();
 
@@ -43,17 +41,22 @@ public:
     bool isAlly = false;
 
     //attack
-    const int attack_radius = 100;
+    const int attack_radius = 9;
+
+    //selection
+    bool selected = false;
+    const real_t selection_radius = 0.8;
+
 
     //Previous position
     int old_x = 0;
     int old_z = 0;
+
+    void move_to_the_enemy_then_attack(BlitzUnit *enemy);
 protected:
     static void _bind_methods();
 private:
     //selection
-    bool leftButtonPressed = false;
-    bool selected = false;
     Sprite3D *selected_circle = nullptr;
 
     //moving
@@ -83,6 +86,7 @@ private:
     void check_grid_position_change();
 
     void on_grid_position_changed();
+
 };
 
 

@@ -22,7 +22,7 @@ add_executable(src ${SOURCE_FILES} ${SOURCES}
         UnitGridXXS.h
         UnitGridXS.h
         grid/array/GridArray.h
-        fill_initial_adjacent_cells_algorithm.h
+        fill_reachable_cells.h
         grid/array/GridArray.cpp)
 
 target_include_directories(src PRIVATE "C:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension")

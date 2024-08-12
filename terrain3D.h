@@ -20,7 +20,7 @@ public:
 
     void _process(double p_delta) override;
 
-    // void _input(const Ref<InputEvent> &p_event) override;
+    void _input(const Ref<InputEvent> &p_event) override;
     void _input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event, const Vector3 &p_position, const Vector3 &p_normal, int32_t p_shape_idx) override;
     Vector2 get_position3d_from(const Vector2 &position2d) const;
 
@@ -32,6 +32,7 @@ protected:
     static void _bind_methods() {}
 private:
     //press
+    bool shiftButtonPressed = false;
     bool leftButtonPressed = false;
     bool rightButtonPressed = false;
     Vector3 pressedPosition;
@@ -42,6 +43,8 @@ private:
     Rect2 drag_rect_area = Rect2();
     bool ray_cast_quadrilateral = false;
     Camera3D *main_camera = nullptr;
+
+    void process_left_button_released();
 };
 
 

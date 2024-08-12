@@ -5,7 +5,6 @@
 #ifndef ENEMYGRID_H
 #define ENEMYGRID_H
 #include "blitzunit.h"
-// #include "UnitGirdFactory.h"
 #include "UnitGridType.h"
 
 class BlitzUnit;
@@ -34,6 +33,9 @@ public:
 
     //debug
     virtual void print() const {}
+
+    virtual std::vector<BlitzUnit*> get_units(int x, int z) { return {}; };
+
 };
 
 

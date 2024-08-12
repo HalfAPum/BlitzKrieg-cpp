@@ -22,9 +22,9 @@
 #include "UnitGirdFactory.h"
 #include "UnitGridXXS.h"
 #include "vector2/hashfunction.h"
-#include "vector2/quadrilateral.h"
 #include "vector2/scan_inner_quadrilateral_grids.h"
 #include "vector2/scan_line.h"
+#include "fill_reachable_cells.h"
 
 
 namespace godot {
@@ -69,6 +69,15 @@ void Terrain3D::update_ui_rect() const {
     }
 }
 
+void Terrain3D::_input(const Ref<InputEvent> &p_event) {
+    if (p_event->is_action_pressed(Constants::getInstance().SHIFT)) {
+        shiftButtonPressed = true;
+    } else if (p_event->is_action_released(Constants::getInstance().SHIFT)) {
+        shiftButtonPressed = false;
+    }
+}
+
+
 
 void Terrain3D::_input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event, const Vector3 &p_position, const Vector3 &p_normal, int32_t p_shape_idx) {
     if (!p_event->is_action_type()) {
@@ -97,8 +106,7 @@ void Terrain3D::_input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event,
         leftButtonPressed = true;
         drag_rect_area.set_position(get_viewport()->get_mouse_position());
     } else if (leftButtonPressed && p_event->is_action_released(Constants::getInstance().LEFT_CLICK)) {
-        leftButtonPressed = false;
-        SelectionManager::getInstance().unselectAll();
+        process_left_button_released();
     } else if (leftButtonDrag && p_event->is_action_released(Constants::getInstance().LEFT_CLICK)) {
         leftButtonDrag = false;
         ui_rect->set_visible(false);
@@ -115,6 +123,82 @@ void Terrain3D::_input_event(Camera3D *p_camera, const Ref<InputEvent> &p_event,
         unit->move_command(pressedPosition);
     }
 }
+
+BlitzUnit* find_selectable_unit(stack<GridCell> &stack, const Vector2 &press_position) {
+    while (!stack.empty()) {
+        const auto grid_cell = stack.top();
+        stack.pop();
+
+        const int x = grid_cell.x;
+        const int z = grid_cell.z;
+
+        if (x < 0 || x >= MAP_SIZE / grid_cell.unit_grid->grid_size) continue;
+        if (z < 0 || z >= MAP_SIZE / grid_cell.unit_grid->grid_size) continue;
+
+        for (auto *unit : grid_cell.unit_grid->get_units(x, z)) {
+            const auto unit_position3D = unit->get_position();
+            const auto unit_position2D = Vector2(unit_position3D.x, unit_position3D.z);
+
+            const auto distance = press_position.distance_to(unit_position2D);
+
+            if (distance <= unit->selection_radius) {
+                return unit;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+void Terrain3D::process_left_button_released() {
+    leftButtonPressed = false;
+
+    std::stack<GridCell> stack;
+
+    const auto press_position = get_position3d_from(get_viewport()->get_mouse_position());
+
+    fill_reachable_cells(
+        stack,
+        press_position.x,
+        press_position.y,
+        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs
+    );
+
+    fill_reachable_cells(
+        stack,
+        press_position.x,
+        press_position.y,
+        UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs
+    );
+
+    const auto selectable_unit = find_selectable_unit(stack, press_position);
+
+    if (selectable_unit == nullptr) {
+        //If we miss with shif pressed don't deselect current items
+        if (!shiftButtonPressed) return
+
+        SelectionManager::getInstance().unselectAll();
+    } else if (selectable_unit->isEnemy) {
+        if (SelectionManager::getInstance().selected_units.empty()) {
+            SelectionManager::getInstance().select(selectable_unit);
+        } else {
+            for (auto unit: SelectionManager::getInstance().selected_units) {
+                unit->move_to_the_enemy_then_attack(selectable_unit);
+            }
+        }
+    } else {
+        if (shiftButtonPressed) {
+            if (selectable_unit->selected) {
+                SelectionManager::getInstance().remove_selection(selectable_unit);
+            } else {
+                SelectionManager::getInstance().add_selection(selectable_unit);
+            }
+        } else {
+            SelectionManager::getInstance().select(selectable_unit);
+        }
+    }
+}
+
 
 Vector2 Terrain3D::get_position3d_from(const Vector2 &position2d) const {
     const auto space_state = get_world_3d()->get_direct_space_state();
