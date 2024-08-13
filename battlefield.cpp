@@ -13,7 +13,6 @@
 class UnitGrid;
 
 void Battlefield::_ready() {
-    return;
     for (int i = 1; i < 20; i+=3) {
         Ref<PackedScene> scene = ResourceLoader::get_singleton()->load("res://blitz_unit.tscn");
         auto *instance = dynamic_cast<BlitzUnit*>(scene->instantiate());

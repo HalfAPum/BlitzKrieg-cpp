@@ -11,6 +11,7 @@
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/timer.hpp>
+#include <godot_cpp/classes/mesh_instance3d.hpp>
 
 class SelectionManager;
 class UnitGrid;
@@ -99,6 +100,10 @@ private:
     //Projectile
     Node3D *bullet_spawn = nullptr;
     Ref<PackedScene> projectile_scene {};
+
+    //health
+    real_t heath_points = 100;
+    MeshInstance3D *hp_bar = nullptr;
 
     void _search_enemy();
 

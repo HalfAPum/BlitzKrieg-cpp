@@ -29,6 +29,7 @@ void BlitzUnit::_bind_methods() {
 
 void BlitzUnit::_ready() {
     rotatable_node = get_node<Node3D>("rotatable_node");
+    hp_bar = get_node<MeshInstance3D>("hp_bar");
 
     if (isEnemy) {
         selected_circle = rotatable_node->get_node<Sprite3D>("selected_circle_enemy");
@@ -374,8 +375,8 @@ void BlitzUnit::move_to_the_enemy_then_attack(BlitzUnit *enemy) {
 }
 
 void BlitzUnit::take_damage(const real_t damage) {
-    UtilityFunctions::print("GOT HIT WITH DAMAGE");
-    UtilityFunctions::print(damage);
+    heath_points -= damage;
+    hp_bar->set_instance_shader_parameter(StringName("progress"), heath_points / 100);
 }
 
 
