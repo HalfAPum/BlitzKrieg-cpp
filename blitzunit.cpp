@@ -284,9 +284,10 @@ void BlitzUnit::move_command(const Vector3 &vector3) {
 
 
 BlitzUnit::~BlitzUnit() {
+    get_unit_grid_factory(this)->grid_xxs->remove_enemy(this);
+
     if (selected) {
         SelectionManager::getInstance().remove_selection(this);
-        get_unit_grid_factory(this)->grid_xxs->remove_enemy(this);
     }
 
     delete search_enemy_timer;
