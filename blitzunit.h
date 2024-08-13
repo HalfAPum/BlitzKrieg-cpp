@@ -52,6 +52,8 @@ public:
     bool selected = false;
     const real_t selection_radius = 1.5;
 
+    //collision
+    const real_t collision_radius = 3;
 
     //Previous position
     int old_x = 0;
@@ -73,7 +75,6 @@ private:
     //collision
     Vector3 collisionMovePosition;
     bool isCollisionMoving = false;
-    const real_t collision_radius = 3;
     const real_t collision_push_distance = 1;
 
     //attack

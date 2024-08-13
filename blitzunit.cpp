@@ -19,6 +19,7 @@
 #include "SelectionManager.h"
 #include "split_grid_cell.h"
 #include "UnitGirdFactory.h"
+#include "collision/collision_detection.h"
 #include "projectile/sampleprojectile.h"
 
 void BlitzUnit::_bind_methods() {
@@ -169,7 +170,13 @@ void BlitzUnit::_physics_process(const double p_delta) {
     }
 
     //detect collision
-    detect_unit_collisions();
+    vector<collision_pair> collided_units;
+    detect_entity_collisions(collided_units, get_position2D(), collision_radius);
+
+    for (const auto &collided : collided_units) {
+        collision_push(collided.first, collided.second);
+        collided.first->collision_push(this, collided.second);
+    }
 
     // if (is_on_floor()) return;
     //
@@ -178,52 +185,6 @@ void BlitzUnit::_physics_process(const double p_delta) {
     // set_velocity(velocity);
     //
     // move_and_slide();
-}
-
-auto *enemy_grid_xxs = UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs;
-auto *ally_grid_xxs = UnitGridFactory::instance().ally_unit_grid_abstract_factory->grid_xxs;
-auto *player_grid_xxs = UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs;
-
-void BlitzUnit::detect_unit_collisions() {
-    const auto position = get_position2D();
-
-    detect_unit_collisions(position, enemy_grid_xxs);
-    detect_unit_collisions(position, ally_grid_xxs);
-    detect_unit_collisions(position, player_grid_xxs);
-}
-
-void BlitzUnit::detect_unit_collisions(const Vector2 &position, UnitGridXXS *grid) {
-    stack<GridCell> stack;
-
-    fill_reachable_cells(stack, position.x, position.y, grid);
-
-    while (!stack.empty()) {
-        const auto cell = stack.top();
-        stack.pop();
-
-        const int x = cell.x;
-        const int z = cell.z;
-
-        if (x < 0 || x >= MAP_SIZE / GRID_SIZE_XXS) continue;
-        if (z < 0 || z >= MAP_SIZE / GRID_SIZE_XXS) continue;
-
-        for (auto *unit : grid->get_units(x, z)) {
-            if (this == unit) continue;
-
-            const auto unit_position = unit->get_position2D();
-
-            if (abs(unit_position.x - position.x) > collision_radius) continue;
-            //position.y is actually position.z but it's Vector2.
-            if (abs(unit_position.y - position.y) > collision_radius) continue;
-
-            const auto distance = position.distance_to(unit_position);
-
-            if (distance <= collision_radius) {
-                collision_push(unit, distance);
-                unit->collision_push(this, distance);
-            }
-        }
-    }
 }
 
 void BlitzUnit::collision_push(const BlitzUnit *collision_unit, const real_t distance) {

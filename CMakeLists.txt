@@ -11,6 +11,8 @@ file(GLOB SOURCES
         vector2/*.h
         projectile/*.cpp
         projectile/*.h
+        collision/*.cpp
+        collision/*.h
 )
 
 add_executable(src ${SOURCE_FILES} ${SOURCES}
