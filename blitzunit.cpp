@@ -296,6 +296,7 @@ void BlitzUnit::prepare_to_attack(const BlitzUnit* enemy) {
 void BlitzUnit::start_attack() {
     auto *projectile = dynamic_cast<SampleProjectile*>(projectile_scene->instantiate());
     projectile->use_remote_timer = true;
+    projectile->owner = this;
 
     add_sibling(projectile);
 
@@ -307,4 +308,10 @@ void BlitzUnit::start_attack() {
 void BlitzUnit::move_to_the_enemy_then_attack(BlitzUnit *enemy) {
     UtilityFunctions::print("Move to the enemy then attack");
 }
+
+void BlitzUnit::take_damage(const real_t damage) {
+    UtilityFunctions::print("GOT HIT WITH DAMAGE");
+    UtilityFunctions::print(damage);
+}
+
 

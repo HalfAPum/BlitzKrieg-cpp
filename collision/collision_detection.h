@@ -16,16 +16,16 @@ using namespace godot;
 //Collision unit with distance
 using collision_pair = pair<BlitzUnit*, real_t>;
 
-auto *enemy_grid_xxs = UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs;
-auto *ally_grid_xxs = UnitGridFactory::instance().ally_unit_grid_abstract_factory->grid_xxs;
-auto *player_grid_xxs = UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs;
+// UnitGridXXS *enemy_grid_xxs = UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs;
+// UnitGridXXS *ally_grid_xxs = UnitGridFactory::instance().ally_unit_grid_abstract_factory->grid_xxs;
+// UnitGridXXS *player_grid_xxs = UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs;
 
 inline void detect_entity_collisions(vector<collision_pair> &collided_units, const Vector2 &position, real_t entity_collision_radius, UnitGridXXS *grid);
 
 inline void detect_entity_collisions(vector<collision_pair> &collided_units, const Vector2 &position, const real_t entity_collision_radius) {
-    detect_entity_collisions(collided_units, position, entity_collision_radius, enemy_grid_xxs);
-    detect_entity_collisions(collided_units, position, entity_collision_radius, ally_grid_xxs);
-    detect_entity_collisions(collided_units, position, entity_collision_radius, player_grid_xxs);
+    detect_entity_collisions(collided_units, position, entity_collision_radius, UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs);
+    detect_entity_collisions(collided_units, position, entity_collision_radius, UnitGridFactory::instance().ally_unit_grid_abstract_factory->grid_xxs);
+    detect_entity_collisions(collided_units, position, entity_collision_radius, UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs);
 }
 
 inline void detect_entity_collisions(
@@ -54,7 +54,7 @@ inline void detect_entity_collisions(
             //Is the same unit
             if (position == unit_position) continue;
 
-            auto collision_radius = max(unit->collision_radius, entity_collision_radius);
+            auto collision_radius = max(unit->projectile_collision_radius, entity_collision_radius);
 
             if (abs(unit_position.x - position.x) > collision_radius) continue;
             //position.y is actually position.z but it's Vector2.

@@ -20,6 +20,8 @@ class UnitGridXXS;
 
 using namespace godot;
 
+class SampleProjectile;
+
 constexpr double DEFAULT_LAST_ROTATION = -999999999.999999999;
 constexpr unsigned MAP_SIZE = 32;
 
@@ -54,12 +56,15 @@ public:
 
     //collision
     const real_t collision_radius = 3;
+    const real_t projectile_collision_radius = 1;
 
     //Previous position
     int old_x = 0;
     int old_z = 0;
 
     void move_to_the_enemy_then_attack(BlitzUnit *enemy);
+
+    void take_damage(real_t damage);
 protected:
     static void _bind_methods();
 private:
