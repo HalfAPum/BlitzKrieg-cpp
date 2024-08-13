@@ -34,6 +34,9 @@ public:
 
     //Keyboard
     const StringName SHIFT = StringName("Shift");
+
+    //Entity
+    const StringName PROGRESS = StringName("progress");
 };
 
 

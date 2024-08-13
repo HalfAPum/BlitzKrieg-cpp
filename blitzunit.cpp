@@ -12,6 +12,7 @@
 #include <godot_cpp/classes/resource_loader.hpp>
 
 #include "can_attack_enemy_algorithm.h"
+#include "Constants.h"
 #include "UnitGrid.h"
 #include "UnitGridXXS.h"
 #include "fill_reachable_cells.h"
@@ -285,6 +286,7 @@ void BlitzUnit::move_command(const Vector3 &vector3) {
 BlitzUnit::~BlitzUnit() {
     if (selected) {
         SelectionManager::getInstance().remove_selection(this);
+        get_unit_grid_factory(this)->grid_xxs->remove_enemy(this);
     }
 
     delete search_enemy_timer;
@@ -344,6 +346,12 @@ void BlitzUnit::_search_enemy() {
     const auto enemy = findEnemy(this);
 
     if (enemy != nullptr) {
+        for(auto *s : SelectionManager::getInstance().selected_units) {
+            UtilityFunctions::print(s);
+        }
+        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_s->print();
+        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xs->print();
+        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->print();
         prepare_to_attack(enemy);
     } else {
     }
@@ -376,7 +384,11 @@ void BlitzUnit::move_to_the_enemy_then_attack(BlitzUnit *enemy) {
 
 void BlitzUnit::take_damage(const real_t damage) {
     heath_points -= damage;
-    hp_bar->set_instance_shader_parameter(StringName("progress"), heath_points / 100);
+    hp_bar->set_instance_shader_parameter(Constants::getInstance().PROGRESS, heath_points / 100);
+
+    if (heath_points <= 0) {
+        queue_free();
+    }
 }
 
 
