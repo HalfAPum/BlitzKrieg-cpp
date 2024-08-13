@@ -21,21 +21,24 @@
 #include "UnitGirdFactory.h"
 #include "collision/collision_detection.h"
 #include "projectile/sampleprojectile.h"
+#include "translation/vector2_to_vector2_translation.h"
 
 void BlitzUnit::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_search_enemy"), &BlitzUnit::_search_enemy);
 }
 
 void BlitzUnit::_ready() {
+    rotatable_node = get_node<Node3D>("rotatable_node");
+
     if (isEnemy) {
-        selected_circle = get_node<Sprite3D>("selected_circle_enemy");
+        selected_circle = rotatable_node->get_node<Sprite3D>("selected_circle_enemy");
     } else {
-        selected_circle = get_node<Sprite3D>("selected_circle");
+        selected_circle = rotatable_node->get_node<Sprite3D>("selected_circle");
     }
 
     selected_circle->set_visible(false);
 
-    bullet_spawn = get_node<Node3D>("BulletSpawn");
+    bullet_spawn = rotatable_node->get_node<Node3D>("BulletSpawn");
     projectile_scene = ResourceLoader::get_singleton()->load("res://sample_projectile.tscn");
 
     get_unit_grid_factory(this)->grid_xxs->add_enemy(this);
@@ -72,8 +75,8 @@ void BlitzUnit::on_grid_position_changed() {
     get_unit_grid_factory(this)->grid_xxs->add_enemy(this);
 }
 
-constexpr real_t MOVE_SPEED = 4;
-constexpr real_t COLLISION_MOVE_SPEED = 1;
+constexpr real_t MOVE_SPEED = 10;
+constexpr real_t COLLISION_MOVE_SPEED = 2;
 constexpr double NORMAL_ROTATION_SPEED = 3;
 constexpr double FINISHING_ROTATION_SPEED = 5;
 
@@ -96,48 +99,107 @@ void BlitzUnit::check_grid_position_change() {
             on_grid_position_changed();
         }
     }
-
-    old_x = x;
-    old_z = z;
 }
 
 void BlitzUnit::_process(double p_delta) {
+    const auto new_position = get_position();
+
     if (isCollisionMoving) {
-        const auto isFinishedMoving = do_move(collisionMovePosition, COLLISION_MOVE_SPEED);
+        const auto isFinishedMoving = do_move(collisionMovePosition, collisionMoveTranslation);
         isCollisionMoving = !isFinishedMoving;
+
+        old_x = new_position.x;
+        old_z = new_position.z;
 
         return;
     }
 
     if (!isMoving || isRotating) return;
 
-    const auto isFinishedMoving = do_move(movePosition, MOVE_SPEED);
+    //recalculate move translation when close to target
+    checkRecalculateMoveTranslation();
+
+    const auto isFinishedMoving = do_move(movePosition, moveTranslation);
     isMoving = !isFinishedMoving;
+
+    old_x = new_position.x;
+    old_z = new_position.z;
 }
 
-bool BlitzUnit::do_move(const Vector3 &target_position, const real_t move_speed) {
+void BlitzUnit::checkRecalculateMoveTranslation() {
+    if (moveTranslationRecalculated) return;
+
+    static constexpr auto TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE = 3.0f;
+
+    const auto position = get_position();
+
+    float x_distance = abs(movePosition.x - position.x);
+    float z_distance = abs(movePosition.z - position.z);
+
+    float old_x_distance = abs(movePosition.x - old_x);
+    float old_z_distance = abs(movePosition.z - old_z);
+
+
+    if (x_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+        if (old_x_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+            recalculateMoveTranslation(position);
+            return;
+        }
+    }
+
+    if (old_x_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+        if (x_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+            recalculateMoveTranslation(position);
+            return;
+        }
+    }
+
+    if (z_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+        if (old_z_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+            recalculateMoveTranslation(position);
+            return;
+        }
+    }
+
+    if (old_z_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+        if (z_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
+            recalculateMoveTranslation(position);
+            return;
+        }
+    }
+}
+
+void BlitzUnit::recalculateMoveTranslation(const Vector3 &position) {
+    moveTranslation = get_move_translation(position, movePosition) * MOVE_SPEED;
+    moveTranslationRecalculated = true;
+}
+
+bool BlitzUnit::do_move(const Vector3 &target_position, const Vector3 &translation) {
+    static constexpr auto MOVEMENT_FINISH_DISTANCE_DIFFERECE = 0.7f;
+
     check_grid_position_change();
 
     const auto position = get_position();
 
-    if (abs(position.distance_to(target_position)) < 0.55) {
+    float x_distance = abs(target_position.x - position.x);
+    float z_distance = abs(target_position.z - position.z);
+
+    if (x_distance > MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
+        //do nothing
+    } else if (z_distance > MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
+        //do nothing
+    } else if (abs(position.distance_to(target_position)) < MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
         return true;
     }
 
-    const auto direction = position.direction_to(target_position);
-    const auto target_velocity = Vector3(direction.x * move_speed, 0, direction.z * move_speed);
-    // very fun jumping effect
-    // set_velocity(direction * move_speed);
-    set_velocity(target_velocity);
-
-    move_and_slide();
+    translate(translation);
 
     return false;
 }
 
 
 void BlitzUnit::rotate(const double p_delta) {
-    const double currentRotation = get_rotation().y;
+    const double currentRotation = rotatable_node->get_rotation().y;
 
     if (abs(currentRotation - last_rotation) <= 0.001) {
         isRotating = false;
@@ -159,8 +221,7 @@ void BlitzUnit::rotate(const double p_delta) {
 
     const double lerp = Math::lerp_angle(currentRotation, target_angle, p_delta * speed);
 
-    set_rotation(Vector3(0, lerp, 0));
-
+    rotatable_node->set_rotation(Vector3(0, lerp, 0));
 }
 
 
@@ -195,6 +256,7 @@ void BlitzUnit::collision_push(const BlitzUnit *collision_unit, const real_t dis
     const auto collision_vector = untis_coordinate_difference / distance * collision_push_distance;
 
     collisionMovePosition = unit_position + Vector3(collision_vector.x, 0, collision_vector.y);
+    collisionMoveTranslation = get_move_translation(unit_position, collisionMovePosition) * COLLISION_MOVE_SPEED;
     isCollisionMoving = true;
 }
 
@@ -212,6 +274,8 @@ void BlitzUnit::unselect() {
 
 void BlitzUnit::move_command(const Vector3 &vector3) {
     movePosition = vector3;
+    moveTranslation = get_move_translation(get_position(), vector3) * MOVE_SPEED;
+    moveTranslationRecalculated = false;
     isRotating = true;
     isMoving = true;
 }

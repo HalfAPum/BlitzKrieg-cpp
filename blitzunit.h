@@ -5,7 +5,7 @@
 #ifndef BLITZUNIT_H
 #define BLITZUNIT_H
 
-#include <godot_cpp/classes/character_body3d.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/classes/camera3d.hpp>
 #include <godot_cpp/classes/sprite3d.hpp>
 #include <godot_cpp/classes/input_event.hpp>
@@ -25,8 +25,8 @@ class SampleProjectile;
 constexpr double DEFAULT_LAST_ROTATION = -999999999.999999999;
 constexpr unsigned MAP_SIZE = 32;
 
-class BlitzUnit : public CharacterBody3D {
-    GDCLASS(BlitzUnit, CharacterBody3D)
+class BlitzUnit : public Node3D {
+    GDCLASS(BlitzUnit, Node3D)
 public:
     ~BlitzUnit() override;
 
@@ -35,7 +35,7 @@ public:
     void _physics_process(double p_delta) override;
 
     //Returns wether finished moving or not.
-    bool do_move(const Vector3 &target_position, real_t move_speed);
+    bool do_move(const Vector3 &target_position, const Vector3 &translation);
 
     Vector2 get_position2D() const;
 
@@ -73,12 +73,20 @@ private:
 
     //moving
     Vector3 movePosition;
+    Vector3 moveTranslation;
+    void checkRecalculateMoveTranslation();
+    void recalculateMoveTranslation(const Vector3 &position);
+    bool moveTranslationRecalculated = false;
     bool isMoving = false;
+
+    //rotation
+    Node3D *rotatable_node = nullptr;
     bool isRotating = false;
     double last_rotation = DEFAULT_LAST_ROTATION;
 
     //collision
     Vector3 collisionMovePosition;
+    Vector3 collisionMoveTranslation;
     bool isCollisionMoving = false;
     const real_t collision_push_distance = 1;
 
