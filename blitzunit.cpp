@@ -185,12 +185,11 @@ auto *ally_grid_xxs = UnitGridFactory::instance().ally_unit_grid_abstract_factor
 auto *player_grid_xxs = UnitGridFactory::instance().player_unit_grid_abstract_factory->grid_xxs;
 
 void BlitzUnit::detect_unit_collisions() {
-    const auto position = get_position();
-    const auto position2D = Vector2(position.x, position.z);
+    const auto position = get_position2D();
 
-    detect_unit_collisions(position2D, enemy_grid_xxs);
-    detect_unit_collisions(position2D, ally_grid_xxs);
-    detect_unit_collisions(position2D, player_grid_xxs);
+    detect_unit_collisions(position, enemy_grid_xxs);
+    detect_unit_collisions(position, ally_grid_xxs);
+    detect_unit_collisions(position, player_grid_xxs);
 }
 
 void BlitzUnit::detect_unit_collisions(const Vector2 &position, UnitGridXXS *grid) {
@@ -211,15 +210,13 @@ void BlitzUnit::detect_unit_collisions(const Vector2 &position, UnitGridXXS *gri
         for (auto *unit : grid->get_units(x, z)) {
             if (this == unit) continue;
 
-            const auto unit_position = unit->get_position();
+            const auto unit_position = unit->get_position2D();
 
             if (abs(unit_position.x - position.x) > collision_radius) continue;
             //position.y is actually position.z but it's Vector2.
-            if (abs(unit_position.z - position.y) > collision_radius) continue;
+            if (abs(unit_position.y - position.y) > collision_radius) continue;
 
-            auto unit_position2D = Vector2(unit_position.x, unit_position.z);
-
-            const auto distance = position.distance_to(unit_position2D);
+            const auto distance = position.distance_to(unit_position);
 
             if (distance <= collision_radius) {
                 collision_push(unit, distance);
@@ -281,11 +278,11 @@ UnitGrid* get_enemy_grid(const real_t radius) {
 
 
 BlitzUnit* findEnemy(const BlitzUnit *unit) {
-    auto position = unit->get_position();
+    auto position = unit->get_position2D();
 
     stack<GridCell> stack;
 
-    fill_reachable_cells(stack, position.x, position.z, get_enemy_grid(unit->attack_radius));
+    fill_reachable_cells(stack, position.x, position.y, get_enemy_grid(unit->attack_radius));
 
     while (!stack.empty()) {
         auto grid_cell = stack.top();
