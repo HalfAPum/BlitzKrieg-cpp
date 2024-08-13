@@ -31,8 +31,11 @@ public:
     void _ready() override;
     void _process(double p_delta) override;
     void _physics_process(double p_delta) override;
-    void detect_unit_collisions();
-    void detect_unit_collisions(const Vector2 &position, UnitGridXXS *grid);
+
+    //Returns wether finished moving or not.
+    bool do_move(const Vector3 &target_position, real_t move_speed);
+
+    Vector2 get_position2D() const;
 
     void select();
     void unselect();
@@ -48,8 +51,6 @@ public:
     //selection
     bool selected = false;
     const real_t selection_radius = 1.5;
-
-    const real_t collision_radius = 3;
 
 
     //Previous position
@@ -68,6 +69,12 @@ private:
     bool isMoving = false;
     bool isRotating = false;
     double last_rotation = DEFAULT_LAST_ROTATION;
+
+    //collision
+    Vector3 collisionMovePosition;
+    bool isCollisionMoving = false;
+    const real_t collision_radius = 3;
+    const real_t collision_push_distance = 1;
 
     //attack
     bool isAttacking = false;
@@ -90,6 +97,11 @@ private:
     void check_grid_position_change();
 
     void on_grid_position_changed();
+
+
+    void detect_unit_collisions();
+    void detect_unit_collisions(const Vector2 &position, UnitGridXXS *grid);
+    void collision_push(const BlitzUnit *collision_unit, real_t distance);
 
 };
 

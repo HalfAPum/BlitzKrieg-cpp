@@ -59,12 +59,20 @@ void BlitzUnit::_ready() {
     search_enemy_timer->start();
 }
 
+Vector2 BlitzUnit::get_position2D() const {
+    const auto position = get_position();
+
+    return { position.x, position.z };
+}
+
+
 void BlitzUnit::on_grid_position_changed() {
     get_unit_grid_factory(this)->grid_xxs->remove_enemy(this);
     get_unit_grid_factory(this)->grid_xxs->add_enemy(this);
 }
 
-constexpr int MOVE_SPEED = 4;
+constexpr real_t MOVE_SPEED = 4;
+constexpr real_t COLLISION_MOVE_SPEED = 1;
 constexpr double NORMAL_ROTATION_SPEED = 3;
 constexpr double FINISHING_ROTATION_SPEED = 5;
 
@@ -92,27 +100,40 @@ void BlitzUnit::check_grid_position_change() {
     old_z = z;
 }
 
-const auto stable_y_coord = Vector3(0, 0.5, 0);
-
 void BlitzUnit::_process(double p_delta) {
+    if (isCollisionMoving) {
+        const auto isFinishedMoving = do_move(collisionMovePosition, COLLISION_MOVE_SPEED);
+        isCollisionMoving = !isFinishedMoving;
+
+        return;
+    }
+
     if (!isMoving || isRotating) return;
 
+    const auto isFinishedMoving = do_move(movePosition, MOVE_SPEED);
+    isMoving = !isFinishedMoving;
+}
+
+bool BlitzUnit::do_move(const Vector3 &target_position, const real_t move_speed) {
     check_grid_position_change();
 
     const auto position = get_position();
 
-    if (abs(position.distance_to(movePosition)) < 0.55) {
-        isMoving = false;
+    if (abs(position.distance_to(target_position)) < 0.55) {
+        return true;
     }
 
-    const auto direction = position.direction_to(movePosition) + stable_y_coord;
-    const auto target_velocity = Vector3(direction.x * MOVE_SPEED, 0, direction.z * MOVE_SPEED);
+    const auto direction = position.direction_to(target_position);
+    const auto target_velocity = Vector3(direction.x * move_speed, 0, direction.z * move_speed);
     // very fun jumping effect
-    // set_velocity(direction * MOVE_SPEED);
+    // set_velocity(direction * move_speed);
     set_velocity(target_velocity);
 
     move_and_slide();
+
+    return false;
 }
+
 
 void BlitzUnit::rotate(const double p_delta) {
     const double currentRotation = get_rotation().y;
@@ -122,6 +143,7 @@ void BlitzUnit::rotate(const double p_delta) {
         last_rotation = DEFAULT_LAST_ROTATION;
 
         if (isAttacking) start_attack();
+        isAttacking = false;
         return;
     }
 
@@ -142,7 +164,7 @@ void BlitzUnit::rotate(const double p_delta) {
 
 
 void BlitzUnit::_physics_process(const double p_delta) {
-    if (isRotating) {
+    if (!isCollisionMoving && isRotating) {
         rotate(p_delta);
     }
 
@@ -200,11 +222,22 @@ void BlitzUnit::detect_unit_collisions(const Vector2 &position, UnitGridXXS *gri
             const auto distance = position.distance_to(unit_position2D);
 
             if (distance <= collision_radius) {
-                isMoving = false;
-                unit->isMoving = false;
+                collision_push(unit, distance);
+                unit->collision_push(this, distance);
             }
         }
     }
+}
+
+void BlitzUnit::collision_push(const BlitzUnit *collision_unit, const real_t distance) {
+    const auto unit_position = get_position();
+
+    const auto untis_coordinate_difference = get_position2D() - collision_unit->get_position2D();
+
+    const auto collision_vector = untis_coordinate_difference / distance * collision_push_distance;
+
+    collisionMovePosition = unit_position + Vector3(collision_vector.x, 0, collision_vector.y);
+    isCollisionMoving = true;
 }
 
 
@@ -309,8 +342,6 @@ void BlitzUnit::start_attack() {
     add_sibling(projectile);
 
     projectile->set_global_transform(bullet_spawn->get_global_transform());
-
-
 
     projectile->set_linear_velocity(projectile->get_position().direction_to(movePosition) * projectile->speed);
 }
