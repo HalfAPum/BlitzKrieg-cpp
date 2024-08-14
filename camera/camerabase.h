@@ -21,12 +21,18 @@ public:
     void _process(double p_delta) override;
     void _unhandled_input(const Ref<InputEvent> &p_event) override;
     void camera_base_move(double delta);
+    void camera_zoom_update(real_t delta);
+    void camera_automatic_pan(real_t delta);
 private:
     CameraSocket *camera_socket = nullptr;
     Camera3D *camera_3d = nullptr;
 
     bool can_move_base = true;
     bool can_process = true;
+    bool can_zoom = true;
+    bool can_automatic_pan = true;
+
+    real_t camera_zoom_direction = 0.0f;
 protected:
     static void _bind_methods() {}
 };

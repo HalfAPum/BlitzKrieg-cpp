@@ -45,6 +45,9 @@ public:
     const StringName CAMERA_LEFT = StringName("CameraLeft");
     const StringName CAMERA_RIGHT = StringName("CameraRight");
 
+    const StringName CAMERA_ZOOM_IN = StringName("CameraZoomIn");
+    const StringName CAMERA_ZOOM_OUT = StringName("CameraZoomOut");
+
     //Scenes
     const Ref<PackedScene> blitz_unit_scene = ResourceLoader::get_singleton()->load("res://blitz_unit.tscn");
 
