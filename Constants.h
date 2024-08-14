@@ -39,6 +39,12 @@ public:
     //Entity
     const StringName PROGRESS = StringName("progress");
 
+    //Camera
+    const StringName CAMERA_FORWARD = StringName("CameraForward");
+    const StringName CAMERA_BACKWARD = StringName("CameraBackward");
+    const StringName CAMERA_LEFT = StringName("CameraLeft");
+    const StringName CAMERA_RIGHT = StringName("CameraRight");
+
     //Scenes
     const Ref<PackedScene> blitz_unit_scene = ResourceLoader::get_singleton()->load("res://blitz_unit.tscn");
 

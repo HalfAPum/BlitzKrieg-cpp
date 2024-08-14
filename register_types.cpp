@@ -7,6 +7,8 @@
 #include "blitzunit.h"
 #include "terrain3D.h"
 #include "battlefield.h"
+#include "camera/camerabase.h"
+#include "camera/camerasocket.h"
 #include "factory/SimpleUnitFactoryT1.h"
 #include "projectile/sampleprojectile.h"
 
@@ -22,6 +24,8 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     GDREGISTER_CLASS(Battlefield);
     GDREGISTER_CLASS(SampleProjectile);
     GDREGISTER_CLASS(SimpleUnitFactoryT1);
+    GDREGISTER_CLASS(CameraBase);
+    GDREGISTER_CLASS(CameraSocket);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

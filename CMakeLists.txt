@@ -17,19 +17,11 @@ file(GLOB SOURCES
         translation/*.h
         factory/*.cpp
         factory/*.h
+        camera/*.cpp
+        camera/*.h
 )
 
-add_executable(src ${SOURCE_FILES} ${SOURCES}
-        Constants.h
-        Terrain3D.h
-        Battlefield.h
-        Battlefield.cpp
-        Battlefield.h
-        UnitGridXXS.h
-        UnitGridXS.h
-        grid/array/GridArray.h
-        fill_reachable_cells.h
-        grid/array/GridArray.cpp)
+add_executable(src ${SOURCE_FILES} ${SOURCES})
 
 target_include_directories(src PRIVATE "C:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gdextension")
 target_include_directories(src PRIVATE "C:/Tools/godot/gdext_orig_tut/gdextension_cpp_example/godot-cpp/gen/include")

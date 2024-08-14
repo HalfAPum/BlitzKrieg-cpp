@@ -32,7 +32,7 @@ namespace godot {
 }
 
 void Terrain3D::_ready() {
-    main_camera = get_parent()->get_node<Node3D>("BaseCam")->get_node<Camera3D>("Camera3D");
+    main_camera = get_parent()->get_node<Node3D>("camera_base")->get_node<Node3D>("camera_socket")->get_node<Camera3D>("Camera3D");
     ui_rect = get_node<NinePatchRect>("SelectRect");
     ui_rect->set_visible(false);
 }
