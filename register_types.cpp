@@ -7,6 +7,7 @@
 #include "blitzunit.h"
 #include "terrain3D.h"
 #include "battlefield.h"
+#include "factory/SimpleUnitFactoryT1.h"
 #include "projectile/sampleprojectile.h"
 
 using namespace godot;
@@ -20,6 +21,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     GDREGISTER_CLASS(Terrain3D);
     GDREGISTER_CLASS(Battlefield);
     GDREGISTER_CLASS(SampleProjectile);
+    GDREGISTER_CLASS(SimpleUnitFactoryT1);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

@@ -347,12 +347,6 @@ void BlitzUnit::_search_enemy() {
     const auto enemy = findEnemy(this);
 
     if (enemy != nullptr) {
-        for(auto *s : SelectionManager::getInstance().selected_units) {
-            UtilityFunctions::print(s);
-        }
-        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_s->print();
-        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xs->print();
-        UnitGridFactory::instance().enemy_unit_grid_abstract_factory->grid_xxs->print();
         prepare_to_attack(enemy);
     } else {
     }

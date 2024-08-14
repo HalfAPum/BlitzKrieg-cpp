@@ -6,8 +6,9 @@
 #define CONSTANTS_H
 
 #include <godot_cpp/classes/project_settings.hpp>
-
-#include "blitzunit.h"
+#include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 
 using namespace godot;
 using namespace std;
@@ -37,6 +38,10 @@ public:
 
     //Entity
     const StringName PROGRESS = StringName("progress");
+
+    //Scenes
+    const Ref<PackedScene> blitz_unit_scene = ResourceLoader::get_singleton()->load("res://blitz_unit.tscn");
+
 };
 
 
