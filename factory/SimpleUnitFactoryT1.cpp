@@ -14,7 +14,7 @@ void SimpleUnitFactoryT1::_ready() {
     unit_spawn = get_node<Node3D>("unit_spawn");
 
     queue.emplace(BlitzUnitBlueprint());
-    queue.emplace(BlitzUnitBlueprint());
+    // queue.emplace(BlitzUnitBlueprint());
 
     unit_spawn_timer = new Timer;
 
@@ -29,6 +29,8 @@ void SimpleUnitFactoryT1::_ready() {
     unit_spawn_timer->start();
 }
 
+constexpr auto PI = 3.141592f;
+
 void SimpleUnitFactoryT1::_create_unit() {
     UtilityFunctions::print("Create unit");
 
@@ -36,6 +38,10 @@ void SimpleUnitFactoryT1::_create_unit() {
         const auto unit = currentWork.create();
 
         unit->set_global_transform(unit_spawn->get_global_transform());
+
+        unit->spawn_rotation_radians = PI / 2;
+        unit->move_command(unit->get_position() + Vector3(-8, 0, 0));
+        unit->move_disabled_state = true;
 
         add_sibling(unit);
 
@@ -46,7 +52,8 @@ void SimpleUnitFactoryT1::_create_unit() {
         currentWork = queue.front();
         queue.pop();
 
-        unit_spawn_timer->start(currentWork.assemble_time);
+        // unit_spawn_timer->start(currentWork.assemble_time);
+        unit_spawn_timer->start(1);
 
         is_working = true;
     }

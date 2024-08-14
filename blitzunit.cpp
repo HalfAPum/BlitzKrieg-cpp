@@ -30,6 +30,9 @@ void BlitzUnit::_bind_methods() {
 
 void BlitzUnit::_ready() {
     rotatable_node = get_node<Node3D>("rotatable_node");
+
+    rotatable_node->set_rotation(Vector3(0, spawn_rotation_radians, 0));
+
     hp_bar = get_node<MeshInstance3D>("hp_bar");
 
     if (isEnemy) {
@@ -122,7 +125,11 @@ void BlitzUnit::_process(double p_delta) {
     checkRecalculateMoveTranslation();
 
     const auto isFinishedMoving = do_move(movePosition, moveTranslation);
-    isMoving = !isFinishedMoving;
+
+    if (isFinishedMoving) {
+        move_disabled_state = false;
+        isMoving = false;
+    }
 
     old_x = new_position.x;
     old_z = new_position.z;
@@ -260,6 +267,9 @@ void BlitzUnit::collision_push(const BlitzUnit *collision_unit, const real_t dis
     collisionMovePosition = unit_position + Vector3(collision_vector.x, 0, collision_vector.y);
     collisionMoveTranslation = get_move_translation(unit_position, collisionMovePosition) * COLLISION_MOVE_SPEED;
     isCollisionMoving = true;
+
+    //disable move_disabled_state when collide with other unit
+    move_disabled_state = false;
 }
 
 
@@ -275,6 +285,8 @@ void BlitzUnit::unselect() {
 }
 
 void BlitzUnit::move_command(const Vector3 &vector3) {
+    if (move_disabled_state) return;
+
     movePosition = vector3;
     moveTranslation = get_move_translation(get_position(), vector3) * MOVE_SPEED;
     moveTranslationRecalculated = false;
@@ -385,5 +397,3 @@ void BlitzUnit::take_damage(const real_t damage) {
         queue_free();
     }
 }
-
-

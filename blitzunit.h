@@ -55,6 +55,10 @@ public:
     bool selected = false;
     const real_t selection_radius = 1.5;
 
+    //after spawn properties
+    real_t spawn_rotation_radians = 0.0f;
+    bool move_disabled_state = false;
+
     //collision
     const real_t collision_radius = 3;
     const real_t projectile_collision_radius = 1;
