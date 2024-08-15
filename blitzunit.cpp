@@ -36,12 +36,15 @@ void BlitzUnit::_ready() {
     hp_bar = get_node<MeshInstance3D>("hp_bar");
 
     if (isEnemy) {
-        selected_circle = rotatable_node->get_node<Sprite3D>("selected_circle_enemy");
+        selected_circle = get_node<Node3D>("selected_circle_enemy");
     } else {
-        selected_circle = rotatable_node->get_node<Sprite3D>("selected_circle");
+        selected_circle = get_node<Node3D>("selected_circle");
     }
 
     selected_circle->set_visible(false);
+
+    attack_circle = get_node<Node3D>("attack_circle");
+    attack_circle->set_visible(false);
 
     bullet_spawn = rotatable_node->get_node<Node3D>("BulletSpawn");
     projectile_scene = ResourceLoader::get_singleton()->load("res://sample_projectile.tscn");
@@ -277,11 +280,13 @@ void BlitzUnit::collision_push(const BlitzUnit *collision_unit, const real_t dis
 void BlitzUnit::select() {
     selected = true;
     selected_circle->set_visible(true);
+    attack_circle->set_visible(true);
 }
 
 void BlitzUnit::unselect() {
     selected = false;
     selected_circle->set_visible(false);
+    attack_circle->set_visible(false);
 }
 
 void BlitzUnit::move_command(const Vector3 &vector3) {

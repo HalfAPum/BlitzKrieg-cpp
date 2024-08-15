@@ -74,7 +74,8 @@ protected:
     static void _bind_methods();
 private:
     //selection
-    Sprite3D *selected_circle = nullptr;
+    Node3D *selected_circle = nullptr;
+    Node3D *attack_circle = nullptr;
 
     //moving
     Vector3 movePosition;
