@@ -16,7 +16,7 @@ constexpr real_t camera_move_speed = 20;
 //zoom
 constexpr real_t camera_zoom_speed = 40;
 constexpr real_t camera_zoom_min_level = 4;
-constexpr real_t camera_zoom_max_level = 25;
+constexpr real_t camera_zoom_max_level = 200;
 constexpr real_t camera_zoom_speed_damp = 0.98;
 
 //pan

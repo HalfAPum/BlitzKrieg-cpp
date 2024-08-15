@@ -24,7 +24,7 @@ using namespace godot;
 class SampleProjectile;
 
 constexpr double DEFAULT_LAST_ROTATION = -999999999.999999999;
-constexpr unsigned MAP_SIZE = 32;
+constexpr unsigned MAP_SIZE = 256;
 
 class BlitzUnit : public Node3D {
     GDCLASS(BlitzUnit, Node3D)

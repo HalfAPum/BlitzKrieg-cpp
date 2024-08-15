@@ -11,8 +11,8 @@
 
 using namespace std;
 
-constexpr int ARRAY_SIZE_S = 2;
 constexpr int GRID_SIZE_S = 16;
+constexpr int ARRAY_SIZE_S = MAP_SIZE / GRID_SIZE_S;
 
 class GridArrayS final : public GridArray {
     array<array<int, ARRAY_SIZE_S>, ARRAY_SIZE_S> units_array {{}};

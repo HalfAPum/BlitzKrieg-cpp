@@ -15,8 +15,8 @@ class BlitzUnit;
 using namespace std;
 using namespace godot;
 
-constexpr int ARRAY_SIZE_XXS = 8;
 constexpr int GRID_SIZE_XXS = 4;
+constexpr int ARRAY_SIZE_XXS = MAP_SIZE / GRID_SIZE_XXS;
 constexpr int GRID_LEVEL_XXS = 0;
 
 class UnitGridXXS final : public UnitGrid {
