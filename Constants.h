@@ -38,6 +38,7 @@ public:
 
     //Entity
     const StringName PROGRESS = StringName("progress");
+    const StringName BAR_COLOR = StringName("bar_color");
 
     //Camera
     const StringName CAMERA_FORWARD = StringName("CameraForward");

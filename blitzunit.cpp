@@ -34,6 +34,11 @@ void BlitzUnit::_ready() {
     rotatable_node->set_rotation(Vector3(0, spawn_rotation_radians, 0));
 
     hp_bar = get_node<MeshInstance3D>("hp_bar");
+    if (isEnemy) {
+        hp_bar->set_instance_shader_parameter(Constants::getInstance().BAR_COLOR, Vector3(1.0, 0.0, 0.0));
+    } else {
+        hp_bar->set_instance_shader_parameter(Constants::getInstance().BAR_COLOR, Vector3(0.0, 1.0, 0.0));
+    }
 
     if (isEnemy) {
         selected_circle = get_node<Node3D>("selected_circle_enemy");
