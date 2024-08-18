@@ -19,6 +19,8 @@ file(GLOB SOURCES
         factory/*.h
         camera/*.cpp
         camera/*.h
+        ygrid/*.cpp
+        ygrid/*.h
 )
 
 add_executable(src ${SOURCE_FILES} ${SOURCES})

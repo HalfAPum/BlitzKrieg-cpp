@@ -23,6 +23,7 @@
 #include "collision/collision_detection.h"
 #include "projectile/sampleprojectile.h"
 #include "translation/vector2_to_vector2_translation.h"
+#include "ygrid/YAxisGrid.h"
 
 void BlitzUnit::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_search_enemy"), &BlitzUnit::_search_enemy);
@@ -247,13 +248,19 @@ void BlitzUnit::_physics_process(const double p_delta) {
         rotate(p_delta);
     }
 
-    //detect collision
+    //detect unit collision
     vector<collision_pair> collided_units;
     detect_entity_collisions(collided_units, get_position2D(), collision_radius);
 
     for (const auto &collided : collided_units) {
         collision_push(collided.first, collided.second);
         collided.first->collision_push(this, collided.second);
+    }
+
+    if (!isEnemy) {
+        //Adjust Y position based on floot collision
+        auto expected_y = YAxisGrid::instance().get_y_value(get_position());
+        UtilityFunctions::print(expected_y);
     }
 
     // if (is_on_floor()) return;
