@@ -65,6 +65,8 @@ public:
     //Previous position
     int old_x = 0;
     int old_z = 0;
+    //Isn't global but rather value from YAxisGrid
+    float old_y = 0;
 
     void move_to_the_enemy_then_attack(BlitzUnit *enemy);
 

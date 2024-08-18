@@ -261,6 +261,11 @@ void BlitzUnit::_physics_process(const double p_delta) {
         //Adjust Y position based on floot collision
         auto expected_y = YAxisGrid::instance().get_y_value(get_position());
         UtilityFunctions::print(expected_y);
+
+        if (expected_y != old_y) {
+            translate(Vector3(0,expected_y - old_y, 0));
+            old_y = expected_y;
+        }
     }
 
     // if (is_on_floor()) return;
