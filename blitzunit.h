@@ -81,9 +81,6 @@ private:
     //moving
     Vector3 movePosition;
     Vector3 moveTranslation;
-    void checkRecalculateMoveTranslation();
-    void recalculateMoveTranslation(const Vector3 &position);
-    bool moveTranslationRecalculated = false;
     bool isMoving = false;
 
     //rotation

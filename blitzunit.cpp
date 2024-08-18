@@ -130,9 +130,6 @@ void BlitzUnit::_process(double p_delta) {
 
     if (!isMoving || isRotating) return;
 
-    //recalculate move translation when close to target
-    checkRecalculateMoveTranslation();
-
     const auto isFinishedMoving = do_move(movePosition, moveTranslation);
 
     if (isFinishedMoving) {
@@ -144,69 +141,21 @@ void BlitzUnit::_process(double p_delta) {
     old_z = new_position.z;
 }
 
-void BlitzUnit::checkRecalculateMoveTranslation() {
-    if (moveTranslationRecalculated) return;
-
-    static constexpr auto TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE = 3.0f;
-
-    const auto position = get_position();
-
-    float x_distance = abs(movePosition.x - position.x);
-    float z_distance = abs(movePosition.z - position.z);
-
-    float old_x_distance = abs(movePosition.x - old_x);
-    float old_z_distance = abs(movePosition.z - old_z);
-
-
-    if (x_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-        if (old_x_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-            recalculateMoveTranslation(position);
-            return;
-        }
-    }
-
-    if (old_x_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-        if (x_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-            recalculateMoveTranslation(position);
-            return;
-        }
-    }
-
-    if (z_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-        if (old_z_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-            recalculateMoveTranslation(position);
-            return;
-        }
-    }
-
-    if (old_z_distance < TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-        if (z_distance >= TRANSLATION_RECALCULATE_DISTANCE_DIFFERECE) {
-            recalculateMoveTranslation(position);
-            return;
-        }
-    }
-}
-
-void BlitzUnit::recalculateMoveTranslation(const Vector3 &position) {
-    moveTranslation = get_move_translation(position, movePosition) * MOVE_SPEED;
-    moveTranslationRecalculated = true;
-}
-
 bool BlitzUnit::do_move(const Vector3 &target_position, const Vector3 &translation) {
-    static constexpr auto MOVEMENT_FINISH_DISTANCE_DIFFERECE = 0.7f;
+    static constexpr auto MOVEMENT_FINISH_DISTANCE_DIFFERECE = 0.1f;
 
     check_grid_position_change();
 
-    const auto position = get_position();
+    const auto position = get_position2D();
 
     float x_distance = abs(target_position.x - position.x);
-    float z_distance = abs(target_position.z - position.z);
+    float z_distance = abs(target_position.z - position.y);
 
     if (x_distance > MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
         //do nothing
     } else if (z_distance > MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
         //do nothing
-    } else if (abs(position.distance_to(target_position)) < MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
+    } else if (abs(position.distance_to(Vector2(target_position.x, target_position.z))) < MOVEMENT_FINISH_DISTANCE_DIFFERECE) {
         return true;
     }
 
@@ -219,7 +168,11 @@ bool BlitzUnit::do_move(const Vector3 &target_position, const Vector3 &translati
 void BlitzUnit::rotate(const double p_delta) {
     const double currentRotation = rotatable_node->get_rotation().y;
 
+    const auto direction = get_position().direction_to(movePosition);
+    const double target_angle = atan2(-direction.x, -direction.z);
+
     if (abs(currentRotation - last_rotation) <= 0.001) {
+        rotatable_node->set_rotation(Vector3(0, target_angle, 0));
         isRotating = false;
         last_rotation = DEFAULT_LAST_ROTATION;
 
@@ -229,9 +182,6 @@ void BlitzUnit::rotate(const double p_delta) {
     }
 
     last_rotation = currentRotation;
-
-    const auto direction = get_position().direction_to(movePosition);
-    const double target_angle = atan2(-direction.x, -direction.z);
 
     double speed;
     if (abs(currentRotation - target_angle) < 0.5) speed = FINISHING_ROTATION_SPEED;
@@ -259,8 +209,7 @@ void BlitzUnit::_physics_process(const double p_delta) {
 
     if (!isEnemy) {
         //Adjust Y position based on floot collision
-        auto expected_y = YAxisGrid::instance().get_y_value(get_position());
-        UtilityFunctions::print(expected_y);
+        const auto expected_y = YAxisGrid::instance().get_y_value(get_position());
 
         if (expected_y != old_y) {
             translate(Vector3(0,expected_y - old_y, 0));
@@ -311,7 +260,6 @@ void BlitzUnit::move_command(const Vector3 &vector3) {
 
     movePosition = vector3;
     moveTranslation = get_move_translation(get_position(), vector3) * MOVE_SPEED;
-    moveTranslationRecalculated = false;
     isRotating = true;
     isMoving = true;
 }
