@@ -10,12 +10,17 @@
 
 #include "../Constants.h"
 
+constexpr int MAP_SIZE_DUPL = 256;
+constexpr real_t POSSIBLE_CAMERA_OFFSET_FROM_MAP = MAP_SIZE_DUPL * 0.1;
+constexpr real_t MIN_CAMERA_OFFSET_FROM_MAP = POSSIBLE_CAMERA_OFFSET_FROM_MAP * -1;
+constexpr real_t MAX_CAMERA_OFFSET_FROM_MAP = POSSIBLE_CAMERA_OFFSET_FROM_MAP + MAP_SIZE_DUPL;
+
 //move
 constexpr real_t camera_move_speed = 20;
 
 //zoom
 constexpr real_t camera_zoom_speed = 100;
-constexpr real_t camera_zoom_min_level = -1;
+constexpr real_t camera_zoom_min_level = 1;
 constexpr real_t camera_zoom_max_level = 200;
 constexpr real_t camera_zoom_speed_damp = 0.98;
 
@@ -61,6 +66,11 @@ void CameraBase::_unhandled_input(const Ref<InputEvent> &p_event) {
     }
 }
 
+void adjust_position_to_camera_limits(Vector3 &new_position) {
+    new_position.x = Math::clamp(new_position.x, MIN_CAMERA_OFFSET_FROM_MAP, MAX_CAMERA_OFFSET_FROM_MAP);
+    new_position.z = Math::clamp(new_position.z, MIN_CAMERA_OFFSET_FROM_MAP, MAX_CAMERA_OFFSET_FROM_MAP);
+}
+
 void CameraBase::_process(const double p_delta) {
     if (!can_process) return;
 
@@ -89,7 +99,11 @@ void CameraBase::camera_base_move(const double delta) {
         velocity -= get_transform().get_basis().get_column(0);
     }
 
-    set_position(get_position() + (velocity.normalized() * camera_move_speed * delta));
+    auto new_position = get_position() + (velocity.normalized() * camera_move_speed * delta);
+
+    adjust_position_to_camera_limits(new_position);
+
+    set_position(new_position);
 }
 
 void CameraBase::camera_zoom_update(const real_t delta) {
@@ -130,12 +144,17 @@ void CameraBase::camera_automatic_pan(const real_t delta) {
         pan_direction.y = 1;
     }
 
-    translate(Vector3(
+    const auto translation = Vector3(
         pan_direction.x * camera_automatic_pan_speed * zoom_factor * delta,
         0,
-        pan_direction.y * camera_automatic_pan_speed * zoom_factor * delta)
+        pan_direction.y * camera_automatic_pan_speed * zoom_factor * delta
     );
 
+    auto new_position = get_position() + translation;
+
+    adjust_position_to_camera_limits(new_position);
+
+    set_position(new_position);
 }
 
 void CameraBase::camera_base_rotate(const real_t delta) {
