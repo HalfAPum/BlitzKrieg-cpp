@@ -13,6 +13,5 @@ float YAxisGrid::get_y_value(const Vector3 &entity_position) const {
     const int x = (entity_position.x * Z_AXIS_PRECISION);
     const int z = (entity_position.z * Z_AXIS_PRECISION);
 
-    //Todo investigate /2 in obj_parser
-    return (*y_grid_array)[x][z]/2;
+    return (*y_grid_array)[x][z];
 }
