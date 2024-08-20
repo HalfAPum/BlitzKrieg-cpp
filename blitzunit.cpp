@@ -177,7 +177,7 @@ void BlitzUnit::rotate(const double p_delta) {
     const double target_angle = atan2(-direction.x, -direction.z);
 
     if (abs(currentRotation_y - last_rotation) <= 0.001) {
-        rotatable_node->set_rotation(Vector3(0, target_angle, 0));
+        rotatable_node->set_rotation(Vector3(currentRotation.x, target_angle, currentRotation.z));
         isRotating = false;
         last_rotation = DEFAULT_LAST_ROTATION;
 
@@ -195,6 +195,32 @@ void BlitzUnit::rotate(const double p_delta) {
     const double lerp = Math::lerp_angle(currentRotation_y, target_angle, p_delta * speed);
 
     rotatable_node->set_rotation(Vector3(currentRotation.x, lerp, currentRotation.z));
+}
+
+float get_angle_from_vectors(const Vector2 &angle_from, const Vector2 &angle_to) {
+    float angle;
+    if (angle_from.x < angle_to.x) {
+        angle = angle_from.angle_to_point(angle_to);
+    } else {
+        angle = angle_to.angle_to_point(angle_from) * -1;
+    }
+
+    constexpr int ANGLE_SMOTHENER = 4;
+
+    return angle / ANGLE_SMOTHENER;
+}
+
+float get_angle_from_vectors2(const Vector2 &angle_from, const Vector2 &angle_to) {
+    float angle;
+    if (angle_from.x < angle_to.x) {
+        angle = angle_from.angle_to_point(angle_to) * -1;
+    } else {
+        angle = angle_to.angle_to_point(angle_from);
+    }
+
+    constexpr int ANGLE_SMOTHENER = 8;
+
+    return angle / ANGLE_SMOTHENER;
 }
 
 
@@ -218,47 +244,27 @@ void BlitzUnit::_physics_process(const double p_delta) {
         const auto expected_y = YAxisGrid::instance().get_y_value(position);
 
         if (expected_y != old_physics_y) {
-            set_position(Vector3(position.x,expected_y, position.z));
-            old_physics_y = expected_y;
+            set_position(Vector3(position.x, expected_y, position.z));
+
+            const float angle_x = get_angle_from_vectors(
+                Vector2(old_physics_x, old_physics_y),
+                Vector2(position.x, expected_y)
+            );
+
+            const float angle_z = get_angle_from_vectors2(
+                Vector2(old_physics_z, old_physics_y),
+                Vector2(position.z, expected_y)
+            );
+
+            const auto rotation = rotatable_node->get_rotation();
+
+            rotatable_node->set_rotation(Vector3(angle_x, rotation.y, angle_z));
         }
+
+        old_physics_x = position.x;
+        old_physics_z = position.z;
+        old_physics_y = expected_y;
     }
-
-    // const auto position = get_position();
-    // const auto expected_y = YAxisGrid::instance().get_y_value(position);
-    //
-    // if (expected_y != old_physics_y) {
-    //     const auto y_translation = expected_y - old_physics_y;
-    //     //translate y axis
-    //     translate(Vector3(0, y_translation, 0));
-    //
-    //     //rotate x axis only if x has changed
-    //     // if (position.x != old_physics_x) {
-    //     //     const auto angle_from = Vector2(old_physics_x, old_physics_y);
-    //     //     const auto angle_to = Vector2(position.x, position.y + y_translation);
-    //     //
-    //     //     const float angle = angle_from.angle_to_point(angle_to);
-    //     //     UtilityFunctions::print(angle_from);
-    //     //     UtilityFunctions::print(angle_to);
-    //     //     UtilityFunctions::print(angle);
-    //     //
-    //     //     rotatable_node->rotate_x(angle - last_x_angle_radians);
-    //     //
-    //     //     last_x_angle_radians = angle;
-    //     // }
-    //
-    //     old_physics_y = position.y;
-    // }
-    //
-    // old_physics_x = position.x;
-    // old_physics_z = position.z;
-
-    // if (is_on_floor()) return;
-    //
-    // auto velocity = get_velocity();
-    // velocity.y -= p_delta * Constants::getInstance().gravity;
-    // set_velocity(velocity);
-    //
-    // move_and_slide();
 }
 
 void BlitzUnit::collision_push(const BlitzUnit *collision_unit, const real_t distance) {

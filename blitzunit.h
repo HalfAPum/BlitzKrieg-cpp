@@ -66,7 +66,6 @@ public:
     int old_x = 0;
     int old_z = 0;
 
-    float last_x_angle_radians = 0;
     float old_physics_x = 0;
     float old_physics_z = 0;
     //Isn't global but rather value from YAxisGrid
